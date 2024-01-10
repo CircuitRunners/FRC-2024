@@ -2,16 +2,29 @@
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
+      "/SmartDashboard/Auto Chooser": "String Chooser",
       "/SmartDashboard/Field": "Field2d"
     },
     "windows": {
+      "/SmartDashboard/Auto Chooser": {
+        "window": {
+          "visible": true
+        }
+      },
       "/SmartDashboard/Field": {
-        "bottom": 544,
-        "builtin": "2024 Crescendo",
-        "height": 8.013679504394531,
-        "left": 46,
-        "right": 1088,
-        "top": 36,
+        "RobotSwerveModules": {
+          "arrowSize": 0,
+          "style": "Hidden"
+        },
+        "Target Pose": {
+          "style": "Hidden"
+        },
+        "bottom": 522,
+        "height": 8.210550308227539,
+        "image": "C:\\Code\\FRC\\Real\\FRC-2024\\2024-field.png",
+        "left": 113,
+        "right": 1008,
+        "top": 25,
         "width": 16.541748046875,
         "window": {
           "visible": true
@@ -22,6 +35,9 @@
   "NetworkTables": {
     "transitory": {
       "SmartDashboard": {
+        "Auto Chooser": {
+          "open": true
+        },
         "Field": {
           "open": true
         },
