@@ -15,10 +15,10 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 
-public class CommandSwerveDrivetrain extends SwerveDrivetrain {
+public class Swerve extends SwerveDrivetrain {
   // private SwerveRequest.ApplyChassisSpeeds autoRequest = new SwerveRequest.ApplyChassisSpeeds();
 
-  public CommandSwerveDrivetrain(SwerveDrivetrainConstants driveTrainConstants,
+  public Swerve(SwerveDrivetrainConstants driveTrainConstants,
       SwerveModuleConstants[] moduleConstants) {
     super(driveTrainConstants, moduleConstants);
     configurePathPlanner();

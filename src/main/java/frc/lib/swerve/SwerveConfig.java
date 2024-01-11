@@ -59,7 +59,7 @@ public class SwerveConfig {
 
   }
 
-  public static CommandSwerveDrivetrain getConfiguredDrivetrain() {
+  public static Swerve getConfiguredDrivetrain() {
     var drivetrain = new SwerveDrivetrainConstants()
         .withPigeon2Id(SwerveConstants.pigeonID)
         .withCANbusName(SwerveConstants.CANBusName);
@@ -72,19 +72,18 @@ public class SwerveConfig {
     var backRight = generateConstants(SwerveConstants.Mod3.angleMotorID, SwerveConstants.Mod3.driveMotorID,
         SwerveConstants.Mod3.canCoderID, SwerveConstants.Mod3.position, SwerveConstants.Mod3.angleOffset.getRadians());
 
-    return new CommandSwerveDrivetrain(drivetrain,
+    return new Swerve(drivetrain,
         new SwerveModuleConstants[] { frontLeft, frontRight, backLeft, backRight });
   }
 
-  public static final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-      .withDeadband(Constants.SwerveConstants.maxSpeedMPS * 0.1);
+  public static final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric();
   public static final SwerveRequest.RobotCentric robotCentric = new SwerveRequest.RobotCentric();
   public static final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
   public static final SwerveRequest.PointWheelsAt pointWheelsAt = new SwerveRequest.PointWheelsAt();
   public static final SwerveRequest.ApplyChassisSpeeds applyChassisSpeeds = new SwerveRequest.ApplyChassisSpeeds();
 
-  public static ChassisSpeeds toChassisSpeeds(DriverControls driverControls, Drive drive) {
-    return ChassisSpeeds.fromFieldRelativeSpeeds(driverControls.driveForward(), driverControls.driveStrafe(),
-        driverControls.driveRotation(), drive.getRotation2d());
+  public static ChassisSpeeds toChassisSpeeds(DriverControls driverControls, Drive drive, boolean fieldRelative) {
+    return new ChassisSpeeds(driverControls.driveForward(), driverControls.driveStrafe(),
+            driverControls.driveRotation());
   }
 }

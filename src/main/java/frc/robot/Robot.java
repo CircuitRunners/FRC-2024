@@ -94,27 +94,26 @@ public class Robot extends TimedRobot {
   }
 
   private void configureAutos() {
+    PathPlannerUtil.configure(drive);
     autoChooser.setDefaultOption("Do Nothing", () -> Commands.none());
-    // PathPlannerUtil.getExistingPaths().forEach(path -> {
-    //   autoChooser.addOption(path, PathPlannerUtil.getAutoCommand(path));
-    // });
+    PathPlannerUtil.getAutos().forEach(path -> {
+      autoChooser.addOption(path, () -> PathPlannerUtil.getAutoCommand(path));
+    });
     SmartDashboard.putData("Auto Chooser", autoChooser);
   }
 
   private void configureBindings() {
     driverControls = new DriverControls(DriverConstants.driverPort);
     drive.setDefaultCommand(
-      drive.driveFieldCentricCommand(SwerveConfig.toChassisSpeeds(driverControls, drive))
-    );
+        drive.driveFieldCentricCommand(() -> SwerveConfig.toChassisSpeeds(driverControls, drive, true)));
     driverControls.increaseLimit().onTrue(drive.increaseLimitCommand());
     driverControls.decreaseLimit().onTrue(drive.decreaseLimitCommand());
-    driverControls.robotRelative().whileTrue(drive.driveRobotCentricCommand(SwerveConfig.toChassisSpeeds(driverControls, drive)));
+    driverControls.robotRelative()
+        .whileTrue(drive.driveRobotCentricCommand(() -> SwerveConfig.toChassisSpeeds(driverControls, drive, false)));
   }
 
   private void configureSubsystems() {
     drive = new Drive(SwerveConfig.getConfiguredDrivetrain());
   }
 
-
-  
 }

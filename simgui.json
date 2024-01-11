@@ -13,8 +13,15 @@
       },
       "/SmartDashboard/Field": {
         "RobotSwerveModules": {
+          "arrowColor": [
+            0.0,
+            6.45570182800293,
+            255.0,
+            255.0
+          ],
           "arrowSize": 0,
-          "style": "Hidden"
+          "style": "Line",
+          "weight": 0.0
         },
         "Target Pose": {
           "style": "Hidden"

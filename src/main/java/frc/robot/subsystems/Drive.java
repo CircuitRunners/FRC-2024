@@ -4,49 +4,54 @@
 
 package frc.robot.subsystems;
 
+import java.util.function.Supplier;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.lib.swerve.CommandSwerveDrivetrain;
+import frc.lib.swerve.Swerve;
 import frc.lib.swerve.SwerveConfig;
 import frc.lib.utils.FieldUtil;
 import frc.lib.utils.PathPlannerUtil;
 import frc.robot.Constants.SwerveConstants;
 
 public class Drive extends SubsystemBase {
-  private CommandSwerveDrivetrain swerve;
+  private Swerve swerve;
+  private FieldUtil fieldUtil = FieldUtil.getField();
 
   /** Creates a new Drive. */
-  public Drive(CommandSwerveDrivetrain swerve) {
+  public Drive(Swerve swerve) {
     this.swerve = swerve;
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    Pose2d targetPose = PathPlannerUtil.getCurrentTargetPose();
+    fieldUtil.setSwerveRobotPose(swerve.getPose2d(), swerve.getModuleStates(),
+        SwerveConstants.modulePositions);
+  
+    fieldUtil.setObjectGlobalPose("Target Pose", targetPose);
+  
   }
 
   @Override
   public void simulationPeriodic() {
     // This method will be called once per scheduler run during simulation
-    Pose2d targetPose = PathPlannerUtil.getCurrentTargetPose();
-    FieldUtil.getField().setSwerveRobotPose(swerve.getPose2d(), swerve.getModuleStates(),
-        SwerveConstants.modulePositions);
-
-    FieldUtil.getField().setObjectGlobalPose("Target Pose", targetPose);
-
     swerve.updateSimState(0.02, 12);
   }
 
   /* Drivebase Control */
   public void driveFieldCentric(ChassisSpeeds speeds) {
+    System.out.println(speeds);
     swerve.setControl(SwerveConfig.drive
         .withVelocityX(speeds.vxMetersPerSecond)
         .withVelocityY(speeds.vyMetersPerSecond)
         .withRotationalRate(speeds.omegaRadiansPerSecond));
+    
   }
 
   public void driveRobotCentric(ChassisSpeeds speeds) {
@@ -81,11 +86,27 @@ public class Drive extends SubsystemBase {
     return Commands.runOnce(this::decreaseLimit);
   }
 
-  public Command driveFieldCentricCommand(ChassisSpeeds chassisSpeeds) {
-    return run(() -> driveFieldCentric(chassisSpeeds));
+  public Command driveFieldCentricCommand(Supplier<ChassisSpeeds> chassisSpeeds) {
+    return run(() -> driveFieldCentric(chassisSpeeds.get()));
   }
 
-  public Command driveRobotCentricCommand(ChassisSpeeds chassisSpeeds) {
-    return run(() -> driveRobotCentric(chassisSpeeds));
+  public Command driveRobotCentricCommand(Supplier<ChassisSpeeds> chassisSpeeds) {
+    return run(() -> driveRobotCentric(chassisSpeeds.get()));
+  }
+
+  public ChassisSpeeds getChassisSpeeds() {
+    return swerve.getChassisSpeeds();
+  }
+
+  public Command brakeCommand() {
+    return run(this::brake);
+  }  
+
+  public Pose2d getPose(){
+    return swerve.getPose2d();
+  }
+
+  public void resetPose(Pose2d pose){
+    swerve.resetPose(pose);
   }
 }

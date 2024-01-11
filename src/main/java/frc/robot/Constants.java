@@ -83,16 +83,18 @@ public final class Constants {
     public static final double maxAngularVelocityRPS = 10.0; //TODO: This must be tuned to specific robot
 
     public static final double slipCurrent = 800;
-    public static final double steerInertia = 0.1;
-    public static final double driveInertia = 0.1;
+    public static final double steerInertia = 0.01;
+    public static final double driveInertia = 0.01;
     public static final double couplingGearRatio = 0;
     public static final String CANBusName = "";
-    public static final PIDConstants translationalPID = new PIDConstants(driveKP, driveKI, driveKD);
-    public static final PIDConstants rotationalPID = new PIDConstants(angleKP, angleKI, angleKD);
     public static final double driveBaseRadiusMeter = trackWidth / 2.0;
     public static final double maxModuleSpeedMPS = maxSpeedMPS;
     public static final Translation2d[] modulePositions = { Mod0.position, Mod1.position, Mod2.position,
-        Mod3.position };
+      Mod3.position };
+
+    /* PID Constants */
+    public static final PIDConstants translationalPID = new PIDConstants(driveKP, driveKI, driveKD);
+    public static final PIDConstants rotationalPID = new PIDConstants(angleKP, angleKI, angleKD);
 
     /* Module Specific Constants */
     /* Front Left Module - Module 0 */
