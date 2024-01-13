@@ -64,23 +64,30 @@ public final class Constants {
     public static final double angleKD = chosenModule.angleKD;
     public static final double angleKF = chosenModule.angleKF;
 
+    /* Angle Motor SYSID values */
+    public static final double angleKS = 0.3;
+    public static final double angleKV = 2.0;
+    public static final double angleKG = 0.0;
+    public static final double angleKA = 0.0;
+
     /* Drive Motor PID Values */
-    public static final double driveKP = 0.05; //TODO: This must be tuned to specific robot
+    public static final double driveKP = 10; //TODO: This must be tuned to specific robot
     public static final double driveKI = 0.0;
-    public static final double driveKD = 0.0;
+    public static final double driveKD = 0.2;
     public static final double driveKF = 0.0;
 
     /* Drive Motor Characterization Values 
      * Divide SYSID values by 12 to convert from volts to percent output for CTRE */
-    public static final double driveKS = (0.32 / 12); //TODO: This must be tuned to specific robot
-    public static final double driveKV = (1.51 / 12);
-    public static final double driveKA = (0.27 / 12);
+    public static final double driveKS = (0.1); //TODO: This must be tuned to specific robot
+    public static final double driveKV = (0.6);
+    public static final double driveKG = (0.0);
+    public static final double driveKA = (0.0);
 
     /* Swerve Profiling Values */
     /** Meters per Second */
     public static final double maxSpeedMPS = 4.5; //TODO: This must be tuned to specific robot
     public static final double maxModuleSpeedMPS = maxSpeedMPS;
-    
+
     /** Radians per Second */
     public static final double maxAngularVelocityRPS = 10.0; //TODO: This must be tuned to specific robot
 
@@ -91,7 +98,7 @@ public final class Constants {
     public static final String CANBusName = "BUS";
     public static final double driveBaseRadiusMeter = trackWidth / 2.0;
     public static final Translation2d[] modulePositions = { Mod0.position, Mod1.position, Mod2.position,
-      Mod3.position };
+        Mod3.position };
 
     /* PID Constants */
     public static final PIDConstants translationalPID = new PIDConstants(driveKP, driveKI, driveKD);

@@ -32,6 +32,10 @@ public class DriverControls extends CommandXboxController {
         * SwerveConstants.maxAngularVelocityRPS;
   }
 
+  public Trigger resetGyro() {
+    return start();
+  }
+
   public Trigger robotRelative() {
     return rightStick();
   }

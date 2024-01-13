@@ -110,6 +110,7 @@ public class Robot extends TimedRobot {
     driverControls.decreaseLimit().onTrue(drive.decreaseLimitCommand());
     driverControls.robotRelative()
         .whileTrue(drive.driveRobotCentricCommand(() -> SwerveConfig.toChassisSpeeds(driverControls, drive)));
+    driverControls.resetGyro().onTrue(drive.resetGyroCommand());
   }
 
   private void configureSubsystems() {

@@ -18,24 +18,24 @@ public class SwerveConfig {
   //TODO: tune configs
   private static final Slot0Configs driveConfigs = new Slot0Configs() {
     {
-      kP = 0.05;
-      kI = 0.0;
-      kD = 0.0;
-      kS = (0.32 / 12);
-      kV = (1.51 / 12);
-      kG = 0.0;
-      kA = (0.27 / 12);
+      kP = SwerveConstants.driveKP;
+      kI = SwerveConstants.driveKI;
+      kD = SwerveConstants.driveKD;
+      kS = SwerveConstants.driveKS;
+      kV = SwerveConstants.driveKV;
+      kG = SwerveConstants.driveKG;
+      kA = SwerveConstants.driveKA;
     }
   };
   private static final Slot0Configs turnConfigs = new Slot0Configs() {
     {
-      kP = 0.0;
-      kI = 0.0;
-      kD = 0.0;
-      kS = 0.0;
-      kV = 0.0;
-      kG = 0.0;
-      kA = 0.0;
+      kP = SwerveConstants.angleKP;
+      kI = SwerveConstants.angleKI;
+      kD = SwerveConstants.angleKD;
+      kS = SwerveConstants.angleKS;
+      kV = SwerveConstants.angleKV;
+      kG = SwerveConstants.angleKG;
+      kA = SwerveConstants.angleKA;
     }
   };
 

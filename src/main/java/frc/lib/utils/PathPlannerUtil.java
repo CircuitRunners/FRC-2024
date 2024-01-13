@@ -34,7 +34,7 @@ public class PathPlannerUtil {
 
   public static void configure(Drive drive) {
     HolonomicPathFollowerConfig config = new HolonomicPathFollowerConfig(SwerveConstants.translationalPID, SwerveConstants.rotationalPID,
-        SwerveConstants.maxModuleSpeedMPS, Units.inchesToMeters(15), new ReplanningConfig(true, true));
+        SwerveConstants.maxModuleSpeedMPS, SwerveConstants.driveBaseRadiusMeter, new ReplanningConfig(true, true));
 
     AutoBuilder.configureHolonomic(
         drive::getPose,

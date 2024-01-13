@@ -109,4 +109,8 @@ public class Drive extends SubsystemBase {
   public void resetPose(Pose2d pose) {
     swerve.resetPose(pose);
   }
+
+  public Command resetGyroCommand(){
+    return swerve.zeroGyroCommand();
+  }
 }
