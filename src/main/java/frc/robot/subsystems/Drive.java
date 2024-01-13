@@ -33,9 +33,9 @@ public class Drive extends SubsystemBase {
     Pose2d targetPose = PathPlannerUtil.getCurrentTargetPose();
     fieldUtil.setSwerveRobotPose(swerve.getPose2d(), swerve.getModuleStates(),
         SwerveConstants.modulePositions);
-  
+
     fieldUtil.setObjectGlobalPose("Target Pose", targetPose);
-  
+
   }
 
   @Override
@@ -51,7 +51,7 @@ public class Drive extends SubsystemBase {
         .withVelocityX(speeds.vxMetersPerSecond)
         .withVelocityY(speeds.vyMetersPerSecond)
         .withRotationalRate(speeds.omegaRadiansPerSecond));
-    
+    System.out.println(getChassisSpeeds());
   }
 
   public void driveRobotCentric(ChassisSpeeds speeds) {
@@ -100,13 +100,13 @@ public class Drive extends SubsystemBase {
 
   public Command brakeCommand() {
     return run(this::brake);
-  }  
+  }
 
-  public Pose2d getPose(){
+  public Pose2d getPose() {
     return swerve.getPose2d();
   }
 
-  public void resetPose(Pose2d pose){
+  public void resetPose(Pose2d pose) {
     swerve.resetPose(pose);
   }
 }

@@ -33,7 +33,7 @@ public class DriverControls extends CommandXboxController {
   }
 
   public Trigger robotRelative() {
-    return x();
+    return rightStick();
   }
 
   public Trigger increaseLimit() {

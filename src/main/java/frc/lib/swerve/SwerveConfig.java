@@ -5,11 +5,11 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstantsFactory;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
+import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
-import frc.robot.Constants;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.io.DriverControls;
 import frc.robot.subsystems.Drive;
@@ -76,13 +76,13 @@ public class SwerveConfig {
         new SwerveModuleConstants[] { frontLeft, frontRight, backLeft, backRight });
   }
 
-  public static final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric();
+  public static final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric().withDriveRequestType(DriveRequestType.OpenLoopVoltage);
   public static final SwerveRequest.RobotCentric robotCentric = new SwerveRequest.RobotCentric();
   public static final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
   public static final SwerveRequest.PointWheelsAt pointWheelsAt = new SwerveRequest.PointWheelsAt();
   public static final SwerveRequest.ApplyChassisSpeeds applyChassisSpeeds = new SwerveRequest.ApplyChassisSpeeds();
 
-  public static ChassisSpeeds toChassisSpeeds(DriverControls driverControls, Drive drive, boolean fieldRelative) {
+  public static ChassisSpeeds toChassisSpeeds(DriverControls driverControls, Drive drive) {
     return new ChassisSpeeds(driverControls.driveForward(), driverControls.driveStrafe(),
             driverControls.driveRotation());
   }

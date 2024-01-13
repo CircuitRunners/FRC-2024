@@ -79,6 +79,8 @@ public final class Constants {
     /* Swerve Profiling Values */
     /** Meters per Second */
     public static final double maxSpeedMPS = 4.5; //TODO: This must be tuned to specific robot
+    public static final double maxModuleSpeedMPS = maxSpeedMPS;
+    
     /** Radians per Second */
     public static final double maxAngularVelocityRPS = 10.0; //TODO: This must be tuned to specific robot
 
@@ -86,9 +88,8 @@ public final class Constants {
     public static final double steerInertia = 0.01;
     public static final double driveInertia = 0.01;
     public static final double couplingGearRatio = 0;
-    public static final String CANBusName = "";
+    public static final String CANBusName = "BUS";
     public static final double driveBaseRadiusMeter = trackWidth / 2.0;
-    public static final double maxModuleSpeedMPS = maxSpeedMPS;
     public static final Translation2d[] modulePositions = { Mod0.position, Mod1.position, Mod2.position,
       Mod3.position };
 
@@ -102,7 +103,7 @@ public final class Constants {
       public static final int driveMotorID = 0;
       public static final int angleMotorID = 1;
       public static final int canCoderID = 0;
-      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(92.2);
+      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(0);
       public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
           canCoderID, angleOffset);
       public static final Translation2d position = new Translation2d(trackWidth / 2.0, wheelBase / 2.0); //front left is  +x, +y
@@ -113,7 +114,7 @@ public final class Constants {
       public static final int driveMotorID = 30;
       public static final int angleMotorID = 31;
       public static final int canCoderID = 1;
-      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(3.8);
+      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(0);
       public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
           canCoderID, angleOffset);
       public static final Translation2d position = new Translation2d(trackWidth / 2.0, -wheelBase / 2.0); //front right is +x, -y
@@ -124,7 +125,7 @@ public final class Constants {
       public static final int driveMotorID = 10;
       public static final int angleMotorID = 11;
       public static final int canCoderID = 2;
-      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(28.1);
+      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(0);
       public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
           canCoderID, angleOffset);
       public static final Translation2d position = new Translation2d(-trackWidth / 2.0, wheelBase / 2.0); //back left is -x, +y
@@ -135,7 +136,7 @@ public final class Constants {
       public static final int driveMotorID = 20;
       public static final int angleMotorID = 21;
       public static final int canCoderID = 3;
-      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(24.2);
+      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(0);
       public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
           canCoderID, angleOffset);
       public static final Translation2d position = new Translation2d(-trackWidth / 2.0, -wheelBase / 2.0); //back right is -x, -y

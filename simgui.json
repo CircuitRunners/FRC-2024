@@ -20,8 +20,11 @@
             255.0
           ],
           "arrowSize": 0,
-          "style": "Line",
-          "weight": 0.0
+          "image": "C:\\Code\\FRC\\Real\\FRC-2024\\swerve_module.png",
+          "length": 0.25,
+          "style": "Box/Image",
+          "weight": 0.0,
+          "width": 0.25
         },
         "Target Pose": {
           "style": "Hidden"

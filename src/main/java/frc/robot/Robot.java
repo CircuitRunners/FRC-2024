@@ -105,11 +105,11 @@ public class Robot extends TimedRobot {
   private void configureBindings() {
     driverControls = new DriverControls(DriverConstants.driverPort);
     drive.setDefaultCommand(
-        drive.driveFieldCentricCommand(() -> SwerveConfig.toChassisSpeeds(driverControls, drive, true)));
+        drive.driveFieldCentricCommand(() -> SwerveConfig.toChassisSpeeds(driverControls, drive)));
     driverControls.increaseLimit().onTrue(drive.increaseLimitCommand());
     driverControls.decreaseLimit().onTrue(drive.decreaseLimitCommand());
     driverControls.robotRelative()
-        .whileTrue(drive.driveRobotCentricCommand(() -> SwerveConfig.toChassisSpeeds(driverControls, drive, false)));
+        .whileTrue(drive.driveRobotCentricCommand(() -> SwerveConfig.toChassisSpeeds(driverControls, drive)));
   }
 
   private void configureSubsystems() {
