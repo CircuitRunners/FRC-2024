@@ -13,16 +13,11 @@ public class DriverControls extends CommandXboxController {
   }
 
   public double driveForward() {
-    System.out
-        .println("Forward" + MathUtil.applyDeadband(-getLeftY(), DriverConstants.stickDeadband) * SwerveConstants.limit
-            * SwerveConstants.maxSpeedMPS);
     return MathUtil.applyDeadband(-getLeftY(), DriverConstants.stickDeadband) * SwerveConstants.limit
         * SwerveConstants.maxSpeedMPS;
   }
 
   public double driveStrafe() {
-    System.out.println("Strafe" +MathUtil.applyDeadband(-getLeftX(), DriverConstants.stickDeadband) * SwerveConstants.limit
-    * SwerveConstants.maxSpeedMPS);
     return MathUtil.applyDeadband(-getLeftX(), DriverConstants.stickDeadband) * SwerveConstants.limit
         * SwerveConstants.maxSpeedMPS;
   }
@@ -30,6 +25,10 @@ public class DriverControls extends CommandXboxController {
   public double driveRotation() {
     return MathUtil.applyDeadband(-getRightX(), DriverConstants.stickDeadband) * SwerveConstants.limit
         * SwerveConstants.maxAngularVelocityRPS;
+  }
+
+  public Trigger toAmp(){
+    return povLeft();
   }
 
   public Trigger resetGyro() {

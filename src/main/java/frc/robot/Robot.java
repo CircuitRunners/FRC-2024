@@ -27,8 +27,8 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     configureSubsystems();
-    configureBindings();
     configureAutos();
+    configureBindings();
   }
 
   @Override
@@ -111,6 +111,8 @@ public class Robot extends TimedRobot {
     driverControls.robotRelative()
         .whileTrue(drive.driveRobotCentricCommand(() -> SwerveConfig.toChassisSpeeds(driverControls, drive)));
     driverControls.resetGyro().onTrue(drive.resetGyroCommand());
+    driverControls.toAmp().whileTrue(PathPlannerUtil.getAutoCommand("Anywhere To Amp"));
+    // driverControls.toAmp().whileTrue(Commands.print("Amp"));
   }
 
   private void configureSubsystems() {

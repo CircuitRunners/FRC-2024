@@ -46,12 +46,10 @@ public class Drive extends SubsystemBase {
 
   /* Drivebase Control */
   public void driveFieldCentric(ChassisSpeeds speeds) {
-    System.out.println(speeds);
     swerve.setControl(SwerveConfig.drive
         .withVelocityX(speeds.vxMetersPerSecond)
         .withVelocityY(speeds.vyMetersPerSecond)
         .withRotationalRate(speeds.omegaRadiansPerSecond));
-    System.out.println(getChassisSpeeds());
   }
 
   public void driveRobotCentric(ChassisSpeeds speeds) {

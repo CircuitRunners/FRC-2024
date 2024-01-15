@@ -14,7 +14,6 @@ import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.DoubleArraySubscriber;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -30,10 +29,9 @@ public class PathPlannerUtil {
   private static final DoubleArraySubscriber kTargetPoseSub = kInstance.getDoubleArrayTopic("/PathPlanner/targetPose")
       .subscribe(new double[] { 0.0, 0.0, 0.0 });
 
-
-
   public static void configure(Drive drive) {
-    HolonomicPathFollowerConfig config = new HolonomicPathFollowerConfig(SwerveConstants.translationalPID, SwerveConstants.rotationalPID,
+    HolonomicPathFollowerConfig config = new HolonomicPathFollowerConfig(SwerveConstants.translationalPID,
+        SwerveConstants.rotationalPID,
         SwerveConstants.maxModuleSpeedMPS, SwerveConstants.driveBaseRadiusMeter, new ReplanningConfig(true, true));
 
     AutoBuilder.configureHolonomic(
@@ -46,9 +44,10 @@ public class PathPlannerUtil {
         drive);
 
     NamedCommands.registerCommand("brake", drive.brakeCommand());
+    NamedCommands.registerCommand("pickUpNote", Commands.print("Pick up note"));
   }
 
-  /** Example static factory for an autonomous command. */
+  /** Returns the command for the auto if it exists. Otherwise throws an error*/
   public static Command getAutoCommand(String name) {
     try {
       return AutoBuilder.buildAuto(name);
