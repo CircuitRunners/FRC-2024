@@ -24,9 +24,7 @@ import frc.robot.Constants.SwerveConstants;
 import frc.robot.subsystems.Drive;
 
 public class PathPlannerUtil {
-  private static final NetworkTableInstance kInstance = NetworkTableInstance.getDefault();
-
-  private static final DoubleArraySubscriber kTargetPoseSub = kInstance.getDoubleArrayTopic("/PathPlanner/targetPose")
+  private static final DoubleArraySubscriber kTargetPoseSub = NetworkTableInstance.getDefault().getDoubleArrayTopic("/PathPlanner/targetPose")
       .subscribe(new double[] { 0.0, 0.0, 0.0 });
 
   public static void configure(Drive drive) {

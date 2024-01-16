@@ -112,7 +112,7 @@ public class Robot extends TimedRobot {
         .whileTrue(drive.driveRobotCentricCommand(() -> SwerveConfig.toChassisSpeeds(driverControls, drive)));
     driverControls.resetGyro().onTrue(drive.resetGyroCommand());
     driverControls.toAmp().whileTrue(PathPlannerUtil.getAutoCommand("Anywhere To Amp"));
-    // driverControls.toAmp().whileTrue(Commands.print("Amp"));
+    driverControls.toPickup().whileTrue(PathPlannerUtil.getAutoCommand("Anywhere To Pickup"));
   }
 
   private void configureSubsystems() {

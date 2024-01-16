@@ -71,7 +71,7 @@ public final class Constants {
     public static final double angleKA = 0.0;
 
     /* Drive Motor PID Values */
-    public static final double driveKP = 20; //TODO: This must be tuned to specific robot
+    public static final double driveKP = 22; //TODO: This must be tuned to specific robot
     public static final double driveKI = 0.20;
     public static final double driveKD = 0.18;
     public static final double driveKF = 0.4;
@@ -104,7 +104,7 @@ public final class Constants {
     public static final PIDConstants translationalPID = new PIDConstants(driveKP, driveKI, driveKD);
     public static final PIDConstants rotationalPID = new PIDConstants(angleKP, angleKI, angleKD);
 
-    /* Module Specific Constants */
+
     /* Front Left Module - Module 0 */
     public static final class Mod0 { //TODO: This must be tuned to specific robot
       public static final int driveMotorID = 0;

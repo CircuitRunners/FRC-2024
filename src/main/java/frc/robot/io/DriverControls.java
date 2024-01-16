@@ -35,8 +35,12 @@ public class DriverControls extends CommandXboxController {
     return start();
   }
 
+  public Trigger focusOnSpeaker(){
+    return leftTrigger();
+  }
+
   public Trigger robotRelative() {
-    return rightStick();
+    return rightTrigger();
   }
 
   public Trigger increaseLimit() {
@@ -45,5 +49,9 @@ public class DriverControls extends CommandXboxController {
 
   public Trigger decreaseLimit() {
     return leftBumper();
+  }
+
+  public Trigger toPickup(){
+    return povUp();
   }
 }
