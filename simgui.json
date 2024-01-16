@@ -1,0 +1,68 @@
+{
+  "NTProvider": {
+    "types": {
+      "/FMSInfo": "FMSInfo",
+      "/SmartDashboard/Auto Chooser": "String Chooser",
+      "/SmartDashboard/Field": "Field2d"
+    },
+    "windows": {
+      "/SmartDashboard/Auto Chooser": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/Field": {
+        "RobotSwerveModules": {
+          "arrowColor": [
+            0.0,
+            6.45570182800293,
+            255.0,
+            255.0
+          ],
+          "arrowSize": 0,
+          "image": "C:\\Code\\FRC\\Real\\FRC-2024\\swerve_module.png",
+          "length": 0.25,
+          "style": "Box/Image",
+          "weight": 0.0,
+          "width": 0.25
+        },
+        "Target Pose": {
+          "style": "Hidden"
+        },
+        "bottom": 522,
+        "height": 8.210550308227539,
+        "image": "C:\\Code\\FRC\\Real\\FRC-2024\\2024-field.png",
+        "left": 113,
+        "right": 1008,
+        "top": 25,
+        "width": 16.541748046875,
+        "window": {
+          "visible": true
+        }
+      }
+    }
+  },
+  "NetworkTables": {
+    "transitory": {
+      "SmartDashboard": {
+        "Auto Chooser": {
+          "open": true
+        },
+        "Field": {
+          "open": true
+        },
+        "open": true
+      }
+    }
+  },
+  "NetworkTables Info": {
+    "visible": true
+  },
+  "Plot": {
+    "Plot <0>": {
+      "window": {
+        "visible": false
+      }
+    }
+  }
+}

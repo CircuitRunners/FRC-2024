@@ -1,0 +1,12 @@
+{
+  "recommendations": [
+    "esbenp.prettier-vscode",
+    "vscjava.vscode-java-pack",
+    "vscjava.vscode-java-debug",
+    "mhutchie.git-graph",
+    "github.vscode-github-actions",
+    "github.vscode-pull-request-github",
+    "github.remotehub",
+    "vscjava.vscode-gradle"
+  ]
+}
