@@ -172,9 +172,24 @@ public final class Constants {
 
   }
 
-  public static final class ArmConstants {
+  public static final class IntakeConstants {
+      
+    public static final int intakeId = 0;
+    public static final int intakeInSpeed = 1.5;
+    public static final int intakeOutSpeed = -0.5;
 
-    public static int intakeId = 0;
+  }
+
+  public static final class ArmConstants {
+      
+    public static final int armId = 0;
+
+    public static final double high = 0;
+    public static final double low = 0;
+
+    public static final double kP = 0;
+    public static final double kI = 0;
+    public static final double kD = 0;
 
   }
 }
