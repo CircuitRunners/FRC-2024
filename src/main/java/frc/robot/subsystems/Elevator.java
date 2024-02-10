@@ -77,6 +77,7 @@ public class Elevator extends SubsystemBase {
     // This method will be called once per scheduler run
     if(!manual){
       elevator.set(elevatorPID.calculate(elevator.getPosition().getValueAsDouble(), goal));
+      elevator.set(elevatorPID.cal)
     }
   }
 }

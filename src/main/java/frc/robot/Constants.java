@@ -192,4 +192,18 @@ public final class Constants {
     public static final double kD = 0;
 
   }
+
+  public static final class ShooterConstants {
+      
+    public static final int shooterLeftId = 0;
+    public static final int shooterRightId = 0;
+
+    public static final double high = 0;
+    public static final double medium = 0;
+    public static final double low = 0;
+
+    public static final double kP = 0;
+    public static final double kI = 0;
+    public static final double kD = 0;
+  }
 }
