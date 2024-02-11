@@ -59,14 +59,16 @@ public class Shooter extends SubsystemBase {
   }
 
   public void spinShooter(double speed){
-    shooter.set(speed);
+    shooterLeft.set(speed);
+    shooterRight.set(speed);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     if(!manual){
-      shooter.set(goal);
+      shooterLeft.set(goal);
+      shooterRight.set(goal);
     }
   }
 }
