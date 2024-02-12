@@ -12,7 +12,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ElevatorConstants;
 
 public class Elevator extends SubsystemBase {
-  private TalonFX elevator = new TalonFX(ElevatorConstants.lMotor);
+  private TalonFX elevatorl = new TalonFX(ElevatorConstants.lMotor);
+  private TalonFX elevatorr = new TalonFX(ElevatorConstants.rMotor);
   PIDController elevatorPID = new PIDController(ElevatorConstants.kP, ElevatorConstants.kI, ElevatorConstants.kD);
   private boolean manual = false;
   private double goal = 0;
@@ -20,13 +21,11 @@ public class Elevator extends SubsystemBase {
 
   /** Creates a new Elevator. */
   public Elevator() {
-    // elevatorR.setIdleMode(IdleMode.kBrake);
-
   }
 
 
   public double getPosition(){
-    return elevator.getPosition().getValueAsDouble();
+    return elevatorl.getPosition().getValueAsDouble();
   }
 
   public Command toggleManualCommand(){
@@ -64,11 +63,11 @@ public class Elevator extends SubsystemBase {
   }
 
   public void moveElevator(double speed){
-    if(elevator.getPosition().getValueAsDouble() < ElevatorConstants.high || elevator.getPosition().getValueAsDouble() > ElevatorConstants.low){
-      elevator.set(0);
+    if(elevatorl.getPosition().getValueAsDouble() < ElevatorConstants.high || elevatorl.getPosition().getValueAsDouble() > ElevatorConstants.low){
+      elevatorl.set(0);
     }
     else{
-      elevator.set(feedforward.calculate(speed));
+      elevatorl.set(feedforward.calculate(speed));
     }
   }
 
@@ -76,8 +75,8 @@ public class Elevator extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     if(!manual){
-      elevator.set(elevatorPID.calculate(elevator.getPosition().getValueAsDouble(), goal));
-      elevator.set(elevatorPID.cal)
+      elevatorl.set(elevatorPID.calculate(elevatorl.getPosition().getValueAsDouble(), goal));
+      elevatorr.set(elevatorPID.calculate(elevatorr.getPosition().getValueAsDouble(), goal));
     }
   }
 }

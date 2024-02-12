@@ -14,13 +14,17 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.swerve.SwerveConfig;
 import frc.lib.utils.PathPlannerUtil;
-import frc.robot.Constants.DriverConstants;
-import frc.robot.io.DriverControls;
-import frc.robot.subsystems.Drive;
+import frc.robot.Constants.*;
+import frc.robot.io.*;
+import frc.robot.subsystems.*;
 
 public class Robot extends TimedRobot {
   private Drive drive;
+  private Elevator elevator;
+  private Intake intake;
+  private Shooter shooter;
   private DriverControls driverControls;
+  private OperatorControls operatorControls;
   private Command m_autonomousCommand;
   private final SendableChooser<Supplier<Command>> autoChooser = new SendableChooser<Supplier<Command>>();
 
@@ -103,6 +107,8 @@ public class Robot extends TimedRobot {
   }
 
   private void configureBindings() {
+
+    // ------------------------------- DRIVER CONTROLS ---------------------------------------------------------
     driverControls = new DriverControls(DriverConstants.driverPort);
     drive.setDefaultCommand(
         drive.driveFieldCentricCommand(() -> SwerveConfig.toChassisSpeeds(driverControls, drive)));
@@ -113,10 +119,38 @@ public class Robot extends TimedRobot {
     driverControls.resetGyro().onTrue(drive.resetGyroCommand());
     driverControls.toAmp().whileTrue(PathPlannerUtil.getAutoCommand("Anywhere To Amp"));
     // driverControls.toAmp().whileTrue(Commands.print("Amp"));
+
+    // ------------------------------- OPERATOR CONTROLS ---------------------------------------------------------
+    operatorControls = new OperatorControls(DriverConstants.operatorPort);
+
+
+    operatorControls.toggleElevatorManual().onTrue(elevator.toggleManualCommand());
+    operatorControls.setElevatorHigh().onTrue(elevator.setHighCommand());
+    operatorControls.setElevatorMid().onTrue(elevator.setMidCommand());
+    operatorControls.setElevatorLow().onTrue(elevator.setLowCommand());
+    elevator.moveElevator(operatorControls.elevatorManual());
+
+    operatorControls.toggleShooterManual().onTrue(shooter.toggleManualCommand());
+    operatorControls.setShooterHigh().onTrue(shooter.setHighCommand());
+    operatorControls.setShooterLow().onTrue(shooter.setLowCommand());
+    shooter.spinShooter(operatorControls.shooterManual());
+    operatorControls.runShooterOut().whileTrue(shooter.runShooterOutCommand());
+    operatorControls.runShooterIn().whileTrue(shooter.runShooterInCommand());
+
+    operatorControls.toggleIntakeManual().onTrue(intake.toggleManualCommand());
+    operatorControls.runIntakeIn().whileTrue(intake.runIntakeInCommand());
+    operatorControls.runIntakeOut().whileTrue(intake.runIntakeOutCommand());
+    operatorControls.setArmHigh().onTrue(intake.setArmHighCommand());
+    operatorControls.setArmLow().onTrue(intake.setArmLowCommand());
+    intake.moveArm(operatorControls.intakeManual());
+
   }
 
   private void configureSubsystems() {
     drive = new Drive(SwerveConfig.getConfiguredDrivetrain());
+    elevator = new Elevator();
+    intake = new Intake();
+    shooter = new Shooter();
   }
 
 }
