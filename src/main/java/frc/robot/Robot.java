@@ -4,9 +4,9 @@
 
 package frc.robot;
 
+import java.util.function.Supplier;
+
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -14,14 +14,13 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.swerve.SwerveConfig;
 import frc.lib.utils.PathPlannerUtil;
-import frc.robot.Constants.*;
-import frc.robot.io.*;
-import frc.robot.subsystems.*;
-import frc.lib.swerve.SwerveConfig;
-import frc.lib.utils.PathPlannerUtil;
 import frc.robot.Constants.DriverConstants;
 import frc.robot.io.DriverControls;
+import frc.robot.io.OperatorControls;
 import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
 
 public class Robot extends TimedRobot {
   private Drive drive;
@@ -30,9 +29,8 @@ public class Robot extends TimedRobot {
   private Shooter shooter;
   private DriverControls driverControls;
   private OperatorControls operatorControls;
-  private Drive drive;
-  private DriverControls driverControls;
   private Command m_autonomousCommand;
+  private final SendableChooser<Supplier<Command>> autoChooser = new SendableChooser<>();
 
 
   @Override
