@@ -22,12 +22,16 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
 
 public class PathPlannerUtil {
-  private static final DoubleArraySubscriber kTargetPoseSub = NetworkTableInstance.getDefault().getDoubleArrayTopic("/PathPlanner/targetPose")
+  private static final DoubleArraySubscriber kTargetPoseSub = NetworkTableInstance.getDefault()
+      .getDoubleArrayTopic("/PathPlanner/targetPose")
       .subscribe(new double[] { 0.0, 0.0, 0.0 });
 
-  public static void configure(Drive drive) {
+  public static void configure(Drive drive, Intake intake, Shooter shooter, Elevator elevator) {
     HolonomicPathFollowerConfig config = new HolonomicPathFollowerConfig(SwerveConstants.translationalPID,
         SwerveConstants.rotationalPID,
         SwerveConstants.maxModuleSpeedMPS, SwerveConstants.driveBaseRadiusMeter, new ReplanningConfig(true, true));
@@ -42,7 +46,19 @@ public class PathPlannerUtil {
         drive);
 
     NamedCommands.registerCommand("brake", drive.brakeCommand());
-    NamedCommands.registerCommand("pickUpNote", Commands.print("Pick up note"));
+    NamedCommands.registerCommand("pickUpNote", intake.runIntakeInCommand());
+    NamedCommands.registerCommand("intakeOut", intake.runIntakeOutCommand());
+    NamedCommands.registerCommand("stopIntake", intake.stopIntakeCommand());
+    NamedCommands.registerCommand("armLow", intake.setArmLowCommand());
+    NamedCommands.registerCommand("armHigh", intake.setArmHighCommand());
+    NamedCommands.registerCommand("shoot", shooter.runShooterOutCommand());
+    NamedCommands.registerCommand("shooterIn", shooter.runShooterInCommand());
+    NamedCommands.registerCommand("shooterLow", shooter.setLowCommand());
+    NamedCommands.registerCommand("shooterHigh", shooter.setHighCommand());
+    NamedCommands.registerCommand("elevatorHigh", elevator.setHighCommand());
+    NamedCommands.registerCommand("elevatorMid", elevator.setMidCommand());
+    NamedCommands.registerCommand("elevatorLow", elevator.setLowCommand());
+
   }
 
   /** Returns the command for the auto if it exists. Otherwise throws an error*/

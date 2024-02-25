@@ -14,9 +14,13 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.swerve.SwerveConfig;
 import frc.lib.utils.PathPlannerUtil;
-import frc.robot.Constants.*;
-import frc.robot.io.*;
-import frc.robot.subsystems.*;
+import frc.robot.Constants.DriverConstants;
+import frc.robot.io.DriverControls;
+import frc.robot.io.OperatorControls;
+import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
 
 public class Robot extends TimedRobot {
   private Drive drive;
@@ -98,7 +102,7 @@ public class Robot extends TimedRobot {
   }
 
   private void configureAutos() {
-    PathPlannerUtil.configure(drive);
+    PathPlannerUtil.configure(drive, intake, shooter, elevator);
     autoChooser.setDefaultOption("Do Nothing", () -> Commands.none());
     PathPlannerUtil.getAutos().forEach(path -> {
       autoChooser.addOption(path, () -> PathPlannerUtil.getAutoCommand(path));
@@ -122,7 +126,6 @@ public class Robot extends TimedRobot {
 
     // ------------------------------- OPERATOR CONTROLS ---------------------------------------------------------
     operatorControls = new OperatorControls(DriverConstants.operatorPort);
-
 
     operatorControls.toggleElevatorManual().onTrue(elevator.toggleManualCommand());
     operatorControls.setElevatorHigh().onTrue(elevator.setHighCommand());
