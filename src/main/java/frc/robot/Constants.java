@@ -2,7 +2,10 @@ package frc.robot;
 
 import com.pathplanner.lib.util.PIDConstants;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
@@ -209,5 +212,11 @@ public final class Constants {
 
     public static final double shooterOutSpeed = 0;
     public static final double shooterInSpeed = 0;
+  }
+
+  public static final class Vision {
+    public static final AprilTagFieldLayout fieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
+    public static final Transform3d frontLeftCamTransform = new Transform3d();
+    public static final Transform3d frontRightCamTransform = new Transform3d();
   }
 }

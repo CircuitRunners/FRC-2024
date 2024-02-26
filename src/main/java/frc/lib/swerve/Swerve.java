@@ -52,4 +52,8 @@ public class Swerve extends SwerveDrivetrain {
   public double getPitch() {
     return m_pigeon2.getPitch().getValueAsDouble();
   }
+
+  public void addVisionMeasurement(Pose2d pose2d, double timestamp){
+    m_odometry.addVisionMeasurement(pose2d, timestamp);
+  }
 }

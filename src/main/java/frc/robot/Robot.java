@@ -31,6 +31,7 @@ public class Robot extends TimedRobot {
   private OperatorControls operatorControls;
   private Command m_autonomousCommand;
   private final SendableChooser<Supplier<Command>> autoChooser = new SendableChooser<>();
+  private final Vision vision = new Vision(drive::addVisionMeasurement);
 
 
   @Override
@@ -41,6 +42,7 @@ public class Robot extends TimedRobot {
     configureSubsystems();
     configureAutos();
     configureBindings();
+    addPeriodic(vision::run, 0.01);
   }
 
   @Override

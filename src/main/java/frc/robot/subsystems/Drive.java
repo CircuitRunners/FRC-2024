@@ -16,6 +16,7 @@ import frc.lib.swerve.Swerve;
 import frc.lib.swerve.SwerveConfig;
 import frc.lib.utils.FieldUtil;
 import frc.lib.utils.PathPlannerUtil;
+import frc.robot.Vision;
 import frc.robot.Constants.SwerveConstants;
 
 public class Drive extends SubsystemBase {
@@ -110,5 +111,9 @@ public class Drive extends SubsystemBase {
 
   public Command resetGyroCommand(){
     return swerve.zeroGyroCommand();
+  }
+
+  public void addVisionMeasurement(Vision.VisionMeasurement visionMeasurement){
+    swerve.addVisionMeasurement(visionMeasurement.pose(), visionMeasurement.timestamp(), visionMeasurement.stdDev());
   }
 }
