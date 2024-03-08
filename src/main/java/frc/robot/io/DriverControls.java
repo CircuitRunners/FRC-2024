@@ -28,7 +28,7 @@ public class DriverControls extends CommandXboxController {
   }
 
   public Trigger toAmp(){
-    return povLeft();
+    return a();
   }
 
   public Trigger resetGyro() {
@@ -52,6 +52,27 @@ public class DriverControls extends CommandXboxController {
   }
 
   public Trigger toPickup(){
+    return b();
+  }
+
+  public Trigger sysIdDynamicForward(){
     return povUp();
   }
+
+  public Trigger sysIdDynamicReverse(){
+    return povDown();
+  }
+
+  public Trigger sysIdQuasistaticForward(){
+    return povLeft();
+  }
+
+  public Trigger sysIdQuasistaticReverse(){
+    return povRight();
+  }
+
+  public Trigger toggleSysIDMode(){
+    return y();
+  }
+
 }
