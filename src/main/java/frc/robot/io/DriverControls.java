@@ -48,8 +48,9 @@ public class DriverControls extends CommandXboxController {
   public Trigger resetGyro() {
     return start();
   }
-  
-  
+
+
+
   public Trigger robotRelative() {
     return leftTrigger();
   }
@@ -57,21 +58,38 @@ public class DriverControls extends CommandXboxController {
   public Trigger increaseLimit() {
     return rightBumper();
   }
-
+  
   public Trigger decreaseLimit() {
     return leftBumper();
   }
-
+  
   public Trigger toAmp(){
     return a();
-  }
-
-  public Trigger toPickup(){
-    return b();
   }
 
   public Trigger aimAtSpeaker() {
     return rightTrigger();
   }
+
+  public Trigger sysIdDynamicForward(){
+    return povUp();
+  }
+
+  public Trigger sysIdDynamicReverse(){
+    return povDown();
+  }
+
+  public Trigger sysIdQuasistaticForward(){
+    return povLeft();
+  }
+
+  public Trigger sysIdQuasistaticReverse(){
+    return povRight();
+  }
+
+  public Trigger toggleSysIDMode(){
+    return y();
+  }
+
 }
 
