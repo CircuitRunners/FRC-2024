@@ -10,8 +10,11 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -290,4 +293,10 @@ public final class Constants {
         public static final double kRedStageClearanceCenter = Units.inchesToMeters(407.9);
         public static final double kRedStageClearanceLeft = Units.inchesToMeters(234.9);
     }
+
+  public static final class Vision {
+    public static final AprilTagFieldLayout fieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
+    public static final Transform3d frontLeftCamTransform = new Transform3d();
+    public static final Transform3d frontRightCamTransform = new Transform3d();
+  }
 }

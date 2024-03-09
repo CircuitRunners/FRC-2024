@@ -64,4 +64,8 @@ public class Swerve extends SwerveDrivetrain {
   public void targetAngleDrive(Rotation2d targetAngle, double forward, double strafe){
     setControl((new SwerveRequest.FieldCentricFacingAngle().withTargetDirection(targetAngle).withVelocityX(forward).withVelocityY(strafe)));
   }
+
+  public void addVisionMeasurement(Pose2d pose2d, double timestamp){
+    m_odometry.addVisionMeasurement(pose2d, timestamp);
+  }
 }

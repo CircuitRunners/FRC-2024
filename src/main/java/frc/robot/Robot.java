@@ -37,7 +37,9 @@ public class Robot extends TimedRobot {
   private DriverControls driverControls;
   private OperatorControls operatorControls;
   private Command m_autonomousCommand;
-  private final SendableChooser<Supplier<Command>> autoChooser = new SendableChooser<Supplier<Command>>();
+  private final SendableChooser<Supplier<Command>> autoChooser = new SendableChooser<>();
+  private final Vision vision = new Vision(drive::addVisionMeasurement);
+
 
   @Override
   public void robotInit() {
@@ -48,6 +50,7 @@ public class Robot extends TimedRobot {
   public void driverStationConnected() {
     configureAutos();
     configureBindings();
+    addPeriodic(vision::run, 0.01);
   }
 
   @Override
@@ -57,19 +60,18 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledInit() {
+  
   }
 
   @Override
-  public void disabledPeriodic() {
-  }
+  public void disabledPeriodic() {}
 
   @Override
-  public void disabledExit() {
-  }
+  public void disabledExit() {}
 
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = autoChooser.getSelected().get();
+    m_autonomousCommand = Commands.none();
 
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
@@ -78,10 +80,12 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousPeriodic() {
+  
   }
 
   @Override
   public void autonomousExit() {
+  
   }
 
   @Override
@@ -93,10 +97,12 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
+  
   }
 
   @Override
   public void teleopExit() {
+  
   }
 
   @Override
@@ -106,6 +112,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testPeriodic() {
+  
   }
 
   @Override
