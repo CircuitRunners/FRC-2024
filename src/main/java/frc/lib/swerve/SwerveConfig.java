@@ -2,10 +2,10 @@ package frc.lib.swerve;
 
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrainConstants;
+import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstantsFactory;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
-import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -46,7 +46,7 @@ public class SwerveConfig {
       .withSlipCurrent(SwerveConstants.slipCurrent)
       .withSteerMotorGains(turnConfigs)
       .withDriveMotorGains(driveConfigs)
-      .withSpeedAt12VoltsMps(SwerveConstants.maxSpeedMPS)
+      .withSpeedAt12VoltsMps(SwerveConstants.maxVelocityMPS)
       .withSteerInertia(SwerveConstants.steerInertia)
       .withDriveInertia(SwerveConstants.driveInertia)
       .withSteerMotorInverted(false)

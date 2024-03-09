@@ -6,7 +6,11 @@ package frc.robot;
 
 import java.util.function.Supplier;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -14,9 +18,16 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.swerve.SwerveConfig;
 import frc.lib.utils.PathPlannerUtil;
-import frc.robot.Constants.*;
-import frc.robot.io.*;
-import frc.robot.subsystems.*;
+import frc.robot.Constants.DriverConstants;
+import frc.robot.Constants.FieldConstants;
+import frc.robot.Constants.SwerveConstants;
+import frc.robot.commands.AimAtSpeaker;
+import frc.robot.io.DriverControls;
+import frc.robot.io.OperatorControls;
+import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
 
 public class Robot extends TimedRobot {
   private Drive drive;
@@ -31,6 +42,10 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     configureSubsystems();
+  }
+  
+  @Override
+  public void driverStationConnected() {
     configureAutos();
     configureBindings();
   }
@@ -98,7 +113,7 @@ public class Robot extends TimedRobot {
   }
 
   private void configureAutos() {
-    PathPlannerUtil.configure(drive);
+    PathPlannerUtil.configure(drive, intake, shooter, elevator);
     autoChooser.setDefaultOption("Do Nothing", () -> Commands.none());
     PathPlannerUtil.getAutos().forEach(path -> {
       autoChooser.addOption(path, () -> PathPlannerUtil.getAutoCommand(path));
@@ -113,16 +128,15 @@ public class Robot extends TimedRobot {
     drive.setDefaultCommand(
         drive.driveFieldCentricCommand(() -> SwerveConfig.toChassisSpeeds(driverControls, drive)));
     driverControls.increaseLimit().onTrue(drive.increaseLimitCommand());
-    driverControls.decreaseLimit().onTrue(drive.decreaseLimitCommand());
     driverControls.robotRelative()
         .whileTrue(drive.driveRobotCentricCommand(() -> SwerveConfig.toChassisSpeeds(driverControls, drive)));
     driverControls.resetGyro().onTrue(drive.resetGyroCommand());
-    driverControls.toAmp().whileTrue(PathPlannerUtil.getAutoCommand("Anywhere To Amp"));
-    // driverControls.toAmp().whileTrue(Commands.print("Amp"));
+    driverControls.toAmp().whileTrue(AutoBuilder.pathfindToPose((DriverStation.getAlliance().get() == Alliance.Blue ? FieldConstants.kBlueAmpPose2d : FieldConstants.kRedAmpPose2d), SwerveConstants.pathConstraints));
+    // driverControls.toPickup().whileTrue(AutoBuilder.pathfindToPose((DriverStation.getAlliance().get() == Alliance.Blue ? FieldConstants.kBlue : FieldConstants.kRedAmpPose2d), SwerveConstants.pathConstraints));
+    driverControls.aimAtSpeaker().whileTrue(new AimAtSpeaker(drive, driverControls));
 
     // ------------------------------- OPERATOR CONTROLS ---------------------------------------------------------
     operatorControls = new OperatorControls(DriverConstants.operatorPort);
-
 
     operatorControls.toggleElevatorManual().onTrue(elevator.toggleManualCommand());
     operatorControls.setElevatorHigh().onTrue(elevator.setHighCommand());
@@ -130,19 +144,16 @@ public class Robot extends TimedRobot {
     operatorControls.setElevatorLow().onTrue(elevator.setLowCommand());
     elevator.moveElevator(operatorControls.elevatorManual());
 
-    operatorControls.toggleShooterManual().onTrue(shooter.toggleManualCommand());
-    operatorControls.setShooterHigh().onTrue(shooter.setHighCommand());
-    operatorControls.setShooterLow().onTrue(shooter.setLowCommand());
+    operatorControls.setShooterHigh().onTrue(shooter.setArmOut());
+    operatorControls.setShooterLow().onTrue(shooter.setArmIn());
     shooter.spinShooter(operatorControls.shooterManual());
     operatorControls.runShooterOut().whileTrue(shooter.runShooterOutCommand());
     operatorControls.runShooterIn().whileTrue(shooter.runShooterInCommand());
 
-    operatorControls.toggleIntakeManual().onTrue(intake.toggleManualCommand());
     operatorControls.runIntakeIn().whileTrue(intake.runIntakeInCommand());
     operatorControls.runIntakeOut().whileTrue(intake.runIntakeOutCommand());
     operatorControls.setArmHigh().onTrue(intake.setArmHighCommand());
     operatorControls.setArmLow().onTrue(intake.setArmLowCommand());
-    intake.moveArm(operatorControls.intakeManual());
 
   }
 

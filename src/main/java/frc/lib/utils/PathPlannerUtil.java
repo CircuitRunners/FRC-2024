@@ -22,17 +22,19 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
 
 public class PathPlannerUtil {
-  private static final NetworkTableInstance kInstance = NetworkTableInstance.getDefault();
-
-  private static final DoubleArraySubscriber kTargetPoseSub = kInstance.getDoubleArrayTopic("/PathPlanner/targetPose")
+  private static final DoubleArraySubscriber kTargetPoseSub = NetworkTableInstance.getDefault()
+      .getDoubleArrayTopic("/PathPlanner/targetPose")
       .subscribe(new double[] { 0.0, 0.0, 0.0 });
 
-  public static void configure(Drive drive) {
+  public static void configure(Drive drive, Intake intake, Shooter shooter, Elevator elevator) {
     HolonomicPathFollowerConfig config = new HolonomicPathFollowerConfig(SwerveConstants.translationalPID,
         SwerveConstants.rotationalPID,
-        SwerveConstants.maxModuleSpeedMPS, SwerveConstants.driveBaseRadiusMeter, new ReplanningConfig(true, true));
+        SwerveConstants.maxModuleVelocityMPS, SwerveConstants.driveBaseRadiusMeter, new ReplanningConfig(true, true));
 
     AutoBuilder.configureHolonomic(
         drive::getPose,
@@ -40,11 +42,23 @@ public class PathPlannerUtil {
         drive::getChassisSpeeds,
         drive::driveRobotCentric,
         config,
-        () -> false,
+        () -> DriverStation.getAlliance().get() == DriverStation.Alliance.Red,
         drive);
 
     NamedCommands.registerCommand("brake", drive.brakeCommand());
-    NamedCommands.registerCommand("pickUpNote", Commands.print("Pick up note"));
+    NamedCommands.registerCommand("pickUpNote", intake.runIntakeInCommand());
+    NamedCommands.registerCommand("intakeOut", intake.runIntakeOutCommand());
+    NamedCommands.registerCommand("stopIntake", intake.stopIntakeCommand());
+    NamedCommands.registerCommand("armLow", intake.setArmLowCommand());
+    NamedCommands.registerCommand("armHigh", intake.setArmHighCommand());
+    NamedCommands.registerCommand("shoot", shooter.runShooterOutCommand());
+    NamedCommands.registerCommand("shooterIn", shooter.runShooterInCommand());
+    NamedCommands.registerCommand("shooterLow", shooter.setArmIn());
+    NamedCommands.registerCommand("shooterHigh", shooter.setArmOut());
+    NamedCommands.registerCommand("elevatorHigh", Commands.print("elevatorHigh"));
+    NamedCommands.registerCommand("elevatorMid", Commands.print("elevatorMed"));
+    NamedCommands.registerCommand("elevatorLow", Commands.print("elevatorLow"));
+
   }
 
   /** Returns the command for the auto if it exists. Otherwise throws an error*/

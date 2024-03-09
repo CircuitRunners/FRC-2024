@@ -11,92 +11,49 @@ public class Intake extends SubsystemBase { // i mostly updated this to match el
   private TalonFX arm = new TalonFX(IntakeConstants.armId);
   private TalonFX intake = new TalonFX(IntakeConstants.intakeId);
   private PIDController armPID = new PIDController(IntakeConstants.kP, IntakeConstants.kI, IntakeConstants.kD);
-  private boolean manual = false;
-  private double goal = 0;
+  private double targetAngle = 0;
 
   public Command runIntakeInCommand(){
-    return run(this::runIntakeIn);
+    return run(() -> runIntake(IntakeConstants.intakeInSpeed));
   }
 
   public Command runIntakeOutCommand(){
-    return run(this::runIntakeOut);
+    return run(() -> runIntake(IntakeConstants.intakeOutSpeed));
   }
 
   public Command stopIntakeCommand(){
-    return run(this::stopIntake);
+    return run(() -> runIntake(0));
   }
 
-  //
-
-  public void runIntakeIn(){
-    intake.set(IntakeConstants.intakeInSpeed);
+  public void runIntake(double speed){
+    intake.set(speed);
   }
 
-  public void runIntakeOut(){
-    intake.set(IntakeConstants.intakeOutSpeed);
-  }
-
-  public void stopIntake(){
-    goal = 0;
-  }
-
-  //
-
-  public Command toggleManualCommand(){
-    return runOnce(this::toggleManual);
-  } // (reminder for myself) :: = pass on the function ...??
-
-  public boolean isManual(){
-    return manual;
-  }
 
   //
 
   public Command setArmHighCommand(){
-    return run(this::setArmHigh);
+    return run(() -> moveArmToTargetPosition(IntakeConstants.high));
   }
 
   public Command setArmLowCommand(){
-    return run(this::setArmLow);
+    return run(() -> moveArmToTargetPosition(IntakeConstants.low));
   }
 
   public Command stopArmCommand(){
-    return run(this::stopArm);
+    return run(() -> moveArmToTargetPosition(0));
   }
 
   //
 
-  public void setArmHigh(){
-    goal = IntakeConstants.high;
+  public void moveArmToTargetPosition(double target){
+    this.targetAngle = target;
   }
 
-  public void setArmLow(){
-    goal = IntakeConstants.low;
-  }
-
-  public void stopArm(){
-    goal = 0;
-  }
-
-  public void toggleManual(){
-    manual = !manual;
-  }
-
-  //
-
-  public void moveArm(double speed){
-    if (arm.getPosition().getValueAsDouble() < IntakeConstants.high || arm.getPosition().getValueAsDouble() > IntakeConstants.low){
-      arm.set(speed);
-    } else {
-      arm.set(0);
-    }
-  }
 
   //
 
   public void periodic(){
-    if (!manual){
-      arm.set(armPID.calculate(arm.getPosition().getValueAsDouble(), goal));
-    }
+    arm.set(armPID.calculate(arm.getPosition().getValueAsDouble(), targetAngle));
   }
 }
