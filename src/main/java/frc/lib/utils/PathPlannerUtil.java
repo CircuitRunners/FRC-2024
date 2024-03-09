@@ -34,7 +34,7 @@ public class PathPlannerUtil {
   public static void configure(Drive drive, Intake intake, Shooter shooter, Elevator elevator) {
     HolonomicPathFollowerConfig config = new HolonomicPathFollowerConfig(SwerveConstants.translationalPID,
         SwerveConstants.rotationalPID,
-        SwerveConstants.maxModuleSpeedMPS, SwerveConstants.driveBaseRadiusMeter, new ReplanningConfig(true, true));
+        SwerveConstants.maxModuleVelocityMPS, SwerveConstants.driveBaseRadiusMeter, new ReplanningConfig(true, true));
 
     AutoBuilder.configureHolonomic(
         drive::getPose,
@@ -42,7 +42,7 @@ public class PathPlannerUtil {
         drive::getChassisSpeeds,
         drive::driveRobotCentric,
         config,
-        () -> false,
+        () -> DriverStation.getAlliance().get() == DriverStation.Alliance.Red,
         drive);
 
     NamedCommands.registerCommand("brake", drive.brakeCommand());
@@ -53,8 +53,8 @@ public class PathPlannerUtil {
     NamedCommands.registerCommand("armHigh", intake.setArmHighCommand());
     NamedCommands.registerCommand("shoot", shooter.runShooterOutCommand());
     NamedCommands.registerCommand("shooterIn", shooter.runShooterInCommand());
-    NamedCommands.registerCommand("shooterLow", shooter.setLowCommand());
-    NamedCommands.registerCommand("shooterHigh", shooter.setHighCommand());
+    NamedCommands.registerCommand("shooterLow", shooter.setArmIn());
+    NamedCommands.registerCommand("shooterHigh", shooter.setArmOut());
     NamedCommands.registerCommand("elevatorHigh", elevator.setHighCommand());
     NamedCommands.registerCommand("elevatorMid", elevator.setMidCommand());
     NamedCommands.registerCommand("elevatorLow", elevator.setLowCommand());

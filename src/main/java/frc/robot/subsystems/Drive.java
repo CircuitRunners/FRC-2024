@@ -111,4 +111,8 @@ public class Drive extends SubsystemBase {
   public Command resetGyroCommand(){
     return swerve.zeroGyroCommand();
   }
+  
+  public void targetAngleDrive(Rotation2d moduleDirection) {
+    swerve.targetAngleDrive(moduleDirection);
+  }
 }

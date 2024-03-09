@@ -6,6 +6,8 @@ package frc.robot;
 
 import java.util.function.Supplier;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -14,7 +16,9 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.swerve.SwerveConfig;
 import frc.lib.utils.PathPlannerUtil;
+import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriverConstants;
+import frc.robot.commands.AimAtSpeaker;
 import frc.robot.io.DriverControls;
 import frc.robot.io.OperatorControls;
 import frc.robot.subsystems.Drive;
@@ -117,12 +121,12 @@ public class Robot extends TimedRobot {
     drive.setDefaultCommand(
         drive.driveFieldCentricCommand(() -> SwerveConfig.toChassisSpeeds(driverControls, drive)));
     driverControls.increaseLimit().onTrue(drive.increaseLimitCommand());
-    driverControls.decreaseLimit().onTrue(drive.decreaseLimitCommand());
     driverControls.robotRelative()
         .whileTrue(drive.driveRobotCentricCommand(() -> SwerveConfig.toChassisSpeeds(driverControls, drive)));
     driverControls.resetGyro().onTrue(drive.resetGyroCommand());
-    driverControls.toAmp().whileTrue(PathPlannerUtil.getAutoCommand("Anywhere To Amp"));
-    driverControls.toPickup().whileTrue(PathPlannerUtil.getAutoCommand("Anywhere To Pickup"));
+    driverControls.toAmp().whileTrue(AutoBuilder.pathfindToPose(AutoConstants.ampPose, null));
+    driverControls.toPickup().whileTrue(AutoBuilder.pathfindToPose(AutoConstants.pickupPose, null));
+    driverControls.aimAtSpeaker().whileTrue(new AimAtSpeaker(drive));
 
     // ------------------------------- OPERATOR CONTROLS ---------------------------------------------------------
     operatorControls = new OperatorControls(DriverConstants.operatorPort);
@@ -133,19 +137,16 @@ public class Robot extends TimedRobot {
     operatorControls.setElevatorLow().onTrue(elevator.setLowCommand());
     elevator.moveElevator(operatorControls.elevatorManual());
 
-    operatorControls.toggleShooterManual().onTrue(shooter.toggleManualCommand());
-    operatorControls.setShooterHigh().onTrue(shooter.setHighCommand());
-    operatorControls.setShooterLow().onTrue(shooter.setLowCommand());
+    operatorControls.setShooterHigh().onTrue(shooter.setArmOut());
+    operatorControls.setShooterLow().onTrue(shooter.setArmIn());
     shooter.spinShooter(operatorControls.shooterManual());
     operatorControls.runShooterOut().whileTrue(shooter.runShooterOutCommand());
     operatorControls.runShooterIn().whileTrue(shooter.runShooterInCommand());
 
-    operatorControls.toggleIntakeManual().onTrue(intake.toggleManualCommand());
     operatorControls.runIntakeIn().whileTrue(intake.runIntakeInCommand());
     operatorControls.runIntakeOut().whileTrue(intake.runIntakeOutCommand());
     operatorControls.setArmHigh().onTrue(intake.setArmHighCommand());
     operatorControls.setArmLow().onTrue(intake.setArmLowCommand());
-    intake.moveArm(operatorControls.intakeManual());
 
   }
 

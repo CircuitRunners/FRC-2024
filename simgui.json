@@ -29,12 +29,12 @@
         "Target Pose": {
           "style": "Hidden"
         },
-        "bottom": 522,
+        "bottom": 1476,
         "height": 8.210550308227539,
         "image": "C:\\Code\\FRC\\Real\\FRC-2024\\2024-field.png",
-        "left": 113,
-        "right": 1008,
-        "top": 25,
+        "left": 150,
+        "right": 2961,
+        "top": 79,
         "width": 16.541748046875,
         "window": {
           "visible": true

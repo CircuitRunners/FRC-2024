@@ -14,12 +14,12 @@ public class DriverControls extends CommandXboxController {
 
   public double driveForward() {
     return MathUtil.applyDeadband(-getLeftY(), DriverConstants.stickDeadband) * SwerveConstants.limit
-        * SwerveConstants.maxSpeedMPS;
+        * SwerveConstants.maxVelocityMPS;
   }
 
   public double driveStrafe() {
     return MathUtil.applyDeadband(-getLeftX(), DriverConstants.stickDeadband) * SwerveConstants.limit
-        * SwerveConstants.maxSpeedMPS;
+        * SwerveConstants.maxVelocityMPS;
   }
 
   public double driveRotation() {
@@ -53,5 +53,9 @@ public class DriverControls extends CommandXboxController {
 
   public Trigger toPickup(){
     return povUp();
+  }
+
+  public Trigger aimAtSpeaker() {
+    return rightTrigger();
   }
 }

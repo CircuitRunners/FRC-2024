@@ -1,7 +1,9 @@
 package frc.robot;
 
+import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.util.PIDConstants;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -85,12 +87,16 @@ public final class Constants {
 
     /* Swerve Profiling Values */
     /** Meters per Second */
-    public static final double maxSpeedMPS = 4.5; //TODO: This must be tuned to specific robot
-    public static final double maxModuleSpeedMPS = maxSpeedMPS;
+    public static final double maxVelocityMPS = 4.5; //TODO: This must be tuned to specific robot
+    public static final double maxModuleVelocityMPS = maxVelocityMPS;
+
+    public static final double maxModuleAccelerationMPSSq = 2.0; //TODO: This must be tuned to specific robot
 
     /** Radians per Second */
     public static final double maxAngularVelocityRPS = 10.0; //TODO: This must be tuned to specific robot
 
+    public static final double maxAngularAccelerationRPSSq = 5.0; //TODO: This must be tuned to specific robot
+    
     public static final double slipCurrent = 800;
     public static final double steerInertia = 0.01;
     public static final double driveInertia = 0.01;
@@ -149,6 +155,8 @@ public final class Constants {
       public static final Translation2d position = new Translation2d(-trackWidth / 2.0, -wheelBase / 2.0); //back right is -x, -y
     }
 
+
+    public static final PathConstraints pathConstraints = new PathConstraints(maxVelocityMPS, maxModuleAccelerationMPSSq, maxAngularVelocityRPS, maxAngularAccelerationRPSSq);
   }
 
   public static final class DriverConstants {
@@ -209,5 +217,11 @@ public final class Constants {
 
     public static final double shooterOutSpeed = 0;
     public static final double shooterInSpeed = 0;
+  }
+
+  public static final class AutoConstants {
+    public static final Pose2d ampPose = new Pose2d(0, 0, new Rotation2d(0));
+    public static final Pose2d pickupPose = new Pose2d(0, 0, new Rotation2d(0));
+    public static final Pose2d speakerPose = new Pose2d();
   }
 }
