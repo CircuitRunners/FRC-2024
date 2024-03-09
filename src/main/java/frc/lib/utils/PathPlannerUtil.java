@@ -55,9 +55,9 @@ public class PathPlannerUtil {
     NamedCommands.registerCommand("shooterIn", shooter.runShooterInCommand());
     NamedCommands.registerCommand("shooterLow", shooter.setArmIn());
     NamedCommands.registerCommand("shooterHigh", shooter.setArmOut());
-    NamedCommands.registerCommand("elevatorHigh", elevator.setHighCommand());
-    NamedCommands.registerCommand("elevatorMid", elevator.setMidCommand());
-    NamedCommands.registerCommand("elevatorLow", elevator.setLowCommand());
+    NamedCommands.registerCommand("elevatorHigh", Commands.print("elevatorHigh"));
+    NamedCommands.registerCommand("elevatorMid", Commands.print("elevatorMed"));
+    NamedCommands.registerCommand("elevatorLow", Commands.print("elevatorLow"));
 
   }
 

@@ -8,7 +8,9 @@ import java.util.function.Supplier;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -16,8 +18,9 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.swerve.SwerveConfig;
 import frc.lib.utils.PathPlannerUtil;
-import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriverConstants;
+import frc.robot.Constants.FieldConstants;
+import frc.robot.Constants.SwerveConstants;
 import frc.robot.commands.AimAtSpeaker;
 import frc.robot.io.DriverControls;
 import frc.robot.io.OperatorControls;
@@ -39,6 +42,10 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     configureSubsystems();
+  }
+  
+  @Override
+  public void driverStationConnected() {
     configureAutos();
     configureBindings();
   }
@@ -124,9 +131,9 @@ public class Robot extends TimedRobot {
     driverControls.robotRelative()
         .whileTrue(drive.driveRobotCentricCommand(() -> SwerveConfig.toChassisSpeeds(driverControls, drive)));
     driverControls.resetGyro().onTrue(drive.resetGyroCommand());
-    driverControls.toAmp().whileTrue(AutoBuilder.pathfindToPose(AutoConstants.ampPose, null));
-    driverControls.toPickup().whileTrue(AutoBuilder.pathfindToPose(AutoConstants.pickupPose, null));
-    driverControls.aimAtSpeaker().whileTrue(new AimAtSpeaker(drive));
+    driverControls.toAmp().whileTrue(AutoBuilder.pathfindToPose((DriverStation.getAlliance().get() == Alliance.Blue ? FieldConstants.kBlueAmpPose2d : FieldConstants.kRedAmpPose2d), SwerveConstants.pathConstraints));
+    // driverControls.toPickup().whileTrue(AutoBuilder.pathfindToPose((DriverStation.getAlliance().get() == Alliance.Blue ? FieldConstants.kBlue : FieldConstants.kRedAmpPose2d), SwerveConstants.pathConstraints));
+    driverControls.aimAtSpeaker().whileTrue(new AimAtSpeaker(drive, driverControls));
 
     // ------------------------------- OPERATOR CONTROLS ---------------------------------------------------------
     operatorControls = new OperatorControls(DriverConstants.operatorPort);

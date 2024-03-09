@@ -4,9 +4,11 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrain;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
+import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -55,7 +57,11 @@ public class Swerve extends SwerveDrivetrain {
     return m_pigeon2.getPitch().getValueAsDouble();
   }
   
-  public void targetAngleDrive(Rotation2d moduleDirection){
-    setControl((new SwerveRequest.PointWheelsAt()).withModuleDirection(moduleDirection));
+  public void targetAngleDrive(Translation2d targetAngle, double forward, double strafe){
+    setControl((new SwerveRequest.FieldCentricFacingAngle().withCenterOfRotation(targetAngle).withVelocityX(forward).withVelocityY(strafe)));
+  }
+  
+  public void targetAngleDrive(Rotation2d targetAngle, double forward, double strafe){
+    setControl((new SwerveRequest.FieldCentricFacingAngle().withTargetDirection(targetAngle).withVelocityX(forward).withVelocityY(strafe)));
   }
 }

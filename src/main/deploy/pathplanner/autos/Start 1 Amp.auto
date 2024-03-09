@@ -18,12 +18,6 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "elevatorMid"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
                   "name": "shooterHigh"
                 }
               }

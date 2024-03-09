@@ -18,12 +18,6 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "elevatorHigh"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
                   "name": "shooterHigh"
                 }
               }
@@ -40,12 +34,6 @@
           "type": "parallel",
           "data": {
             "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "elevatorLow"
-                }
-              },
               {
                 "type": "named",
                 "data": {
@@ -124,12 +112,6 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "elevatorHigh"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
                   "name": "shooterHigh"
                 }
               }
@@ -146,12 +128,6 @@
           "type": "parallel",
           "data": {
             "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "elevatorLow"
-                }
-              },
               {
                 "type": "named",
                 "data": {
@@ -223,12 +199,6 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "elevatorHigh"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
                   "name": "shooterHigh"
                 }
               }
@@ -245,12 +215,6 @@
           "type": "parallel",
           "data": {
             "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "elevatorLow"
-                }
-              },
               {
                 "type": "named",
                 "data": {

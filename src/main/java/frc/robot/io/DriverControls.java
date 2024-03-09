@@ -27,22 +27,16 @@ public class DriverControls extends CommandXboxController {
         * SwerveConstants.maxAngularVelocityRPS;
   }
 
-  public Trigger toAmp(){
-    return povLeft();
-  }
-
+  
   public Trigger resetGyro() {
     return start();
   }
-
-  public Trigger focusOnSpeaker(){
+  
+  
+  public Trigger robotRelative() {
     return leftTrigger();
   }
-
-  public Trigger robotRelative() {
-    return rightTrigger();
-  }
-
+  
   public Trigger increaseLimit() {
     return rightBumper();
   }
@@ -51,8 +45,12 @@ public class DriverControls extends CommandXboxController {
     return leftBumper();
   }
 
+  public Trigger toAmp(){
+    return a();
+  }
+
   public Trigger toPickup(){
-    return povUp();
+    return b();
   }
 
   public Trigger aimAtSpeaker() {
