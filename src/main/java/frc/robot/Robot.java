@@ -101,7 +101,13 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-  
+    driverControls.y().onTrue(drive.toggleSysIDMode());
+    driverControls.sysIdDynamicForward().whileTrue(drive.sysIdDynamic(Direction.kForward));
+    driverControls.sysIdDynamicReverse().whileTrue(drive.sysIdDynamic(Direction.kReverse));
+    driverControls.sysIdQuasistaticForward().whileTrue(drive.sysIdQuasistatic(Direction.kForward));
+    driverControls.sysIdQuasistaticReverse().whileTrue(drive.sysIdQuasistatic(Direction.kReverse));
+    driverControls.toAmp().whileTrue(AutoBuilder.pathfindToPose((DriverStation.getAlliance().get() == Alliance.Blue ? FieldConstants.kBlueAmpPose2d : FieldConstants.kRedAmpPose2d), SwerveConstants.pathConstraints));
+    driverControls.aimAtSpeaker().whileTrue(new AimAtSpeaker(drive, driverControls));
   }
 
   @Override
