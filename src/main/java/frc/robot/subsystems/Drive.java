@@ -8,6 +8,7 @@ import java.util.function.Supplier;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -18,6 +19,7 @@ import frc.lib.utils.FieldUtil;
 import frc.lib.utils.PathPlannerUtil;
 import frc.robot.Vision;
 import frc.robot.Constants.SwerveConstants;
+import frc.robot.io.DriverControls;
 
 public class Drive extends SubsystemBase {
   private Swerve swerve;
@@ -111,6 +113,14 @@ public class Drive extends SubsystemBase {
 
   public Command resetGyroCommand(){
     return swerve.zeroGyroCommand();
+  }
+  
+  public void targetAngleDrive(Translation2d targetAngle, DriverControls controls) {
+    swerve.targetAngleDrive(targetAngle, controls.driveForward(), controls.driveStrafe());
+  }
+  
+  public void targetAngleDrive(Rotation2d targetAngle, DriverControls controls) {
+    swerve.targetAngleDrive(targetAngle, controls.driveForward(), controls.driveStrafe());
   }
 
   public void addVisionMeasurement(Vision.VisionMeasurement visionMeasurement){

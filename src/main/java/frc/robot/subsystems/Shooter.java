@@ -4,6 +4,7 @@ package frc.robot.subsystems;
 
 
 import com.ctre.phoenix6.hardware.TalonFX;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -13,9 +14,9 @@ public class Shooter extends SubsystemBase {
   private TalonFX shooterLeft = new TalonFX(ShooterConstants.shooterLeftId);
   private TalonFX shooterRight = new TalonFX(ShooterConstants.shooterRightId);
   private TalonFX shooterArm = new TalonFX(ShooterConstants.shooterArmId); 
-  PIDController shooterPID = new PIDController(ShooterConstants.kP, ShooterConstants.kI, ShooterConstants.kD);
-  private boolean manual = false;
-  private double goal = 0;
+  private PIDController shooterPID = new PIDController(ShooterConstants.kP, ShooterConstants.kI, ShooterConstants.kD);
+
+  private double targetAngle = 0;
 
   public Shooter() {
     shooterRight.setInverted(true);
@@ -24,49 +25,26 @@ public class Shooter extends SubsystemBase {
     return shooterArm.getPosition().getValueAsDouble();
   }
 
-  public Command toggleManualCommand(){
-    return runOnce(this::toggleManual);
+
+  public void moveArmToTargetPosition(double targetAngle){ 
+    this.targetAngle = targetAngle;
   }
-  public void toggleManual(){
-    manual = !manual;
+  
+  public Command setArmOut(){
+    return runOnce(() -> moveArmToTargetPosition(ShooterConstants.high));
   }
 
-  public boolean isManual(){
-    return manual;
+  public Command setArmIn(){
+    return runOnce(() -> moveArmToTargetPosition(ShooterConstants.low));
   }
 
-  public Command setHighCommand(){
-    return runOnce(this::setHigh);
-  }
-  public void setHigh(){
-    goal = ShooterConstants.high;
-  }
-
-
-  public Command setLowCommand(){
-    return runOnce(this::setLow);
-  }
-
-  public void setLow(){
-    goal = ShooterConstants.low;
-  }
-
-  public void runShooterOut(){
-    shooterLeft.set(ShooterConstants.shooterOutSpeed);
-    shooterRight.set(ShooterConstants.shooterOutSpeed);
-  }
-
-  public void runShooterIn(){
-    shooterLeft.set(ShooterConstants.shooterOutSpeed);
-    shooterRight.set(ShooterConstants.shooterOutSpeed);
-  }
 
   public Command runShooterOutCommand(){
-    return run(this::runShooterOut);
+    return run(() -> spinShooter(ShooterConstants.shooterOutSpeed));
   }
 
   public Command runShooterInCommand(){
-    return run(this::runShooterIn);
+    return run(() -> spinShooter(ShooterConstants.shooterInSpeed));
   }
 
   public void spinShooter(double speed){
@@ -77,8 +55,6 @@ public class Shooter extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    if(!manual){
-      shooterArm.set(shooterPID.calculate(getPosition(), goal));
-    }
+    shooterArm.set(shooterPID.calculate(getPosition(), targetAngle));
   }
 }
