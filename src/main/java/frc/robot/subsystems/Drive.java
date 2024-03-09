@@ -4,7 +4,13 @@
 
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.Volts;
+
 import java.util.function.Supplier;
+
+import com.ctre.phoenix6.SignalLogger;
+import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest.SysIdSwerveRotation;
+import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest.SysIdSwerveTranslation;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -13,20 +19,45 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.lib.swerve.Swerve;
 import frc.lib.swerve.SwerveConfig;
 import frc.lib.utils.FieldUtil;
 import frc.lib.utils.PathPlannerUtil;
-import frc.robot.Vision;
+// import frc.robot.Vision;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.io.DriverControls;
-
 public class Drive extends SubsystemBase {
   private Swerve swerve;
   private FieldUtil fieldUtil = FieldUtil.getField();
-
+  private boolean sysIdTranslator = true;
+  private final SysIdSwerveTranslation translation = new SysIdSwerveTranslation();
+  private final SysIdRoutine sysIdTranslation = new SysIdRoutine(
+    new SysIdRoutine.Config(
+      null,
+      Volts.of(7),
+      null,
+      (state) -> SignalLogger.writeString("state", state.toString())),
+    new SysIdRoutine.Mechanism(
+      (volts) -> swerve.setControl(translation.withVolts(volts)),
+      null,
+      this));
+  private final SysIdSwerveRotation rotation = new SysIdSwerveRotation();
+  private final SysIdRoutine sysIdRotation = new SysIdRoutine(
+    new SysIdRoutine.Config(
+      null,
+      Volts.of(7),
+      null,
+      (state) -> SignalLogger.writeString("state", state.toString())),
+    new SysIdRoutine.Mechanism(
+      (volts) -> swerve.setControl(rotation.withVolts(volts)),
+      null,
+      this));
+  
   /** Creates a new Drive. */
   public Drive(Swerve swerve) {
+    SignalLogger.setPath("logs/sysid/drive");
     this.swerve = swerve;
   }
 
@@ -115,6 +146,21 @@ public class Drive extends SubsystemBase {
     return swerve.zeroGyroCommand();
   }
   
+
+  public Command sysIdDynamic(Direction direction) {
+    return sysIdTranslator ? sysIdTranslation.dynamic(direction): sysIdRotation.dynamic(direction);
+  }
+
+  public Command sysIdQuasistatic(Direction direction) {
+    return sysIdTranslator ? sysIdTranslation.quasistatic(direction) : sysIdRotation.quasistatic(direction);
+  }
+
+
+  public Command toggleSysIDMode() {
+    return Commands.runOnce(() -> sysIdTranslator = !sysIdTranslator);
+  }
+
+  
   public void targetAngleDrive(Translation2d targetAngle, DriverControls controls) {
     swerve.targetAngleDrive(targetAngle, controls.driveForward(), controls.driveStrafe());
   }
@@ -123,7 +169,7 @@ public class Drive extends SubsystemBase {
     swerve.targetAngleDrive(targetAngle, controls.driveForward(), controls.driveStrafe());
   }
 
-  public void addVisionMeasurement(Vision.VisionMeasurement visionMeasurement){
-    swerve.addVisionMeasurement(visionMeasurement.pose(), visionMeasurement.timestamp(), visionMeasurement.stdDev());
-  }
+  // // // // public void addVisionMeasurement(Vision.VisionMeasurement visionMeasurement){
+    // // // // swerve.addVisionMeasurement(visionMeasurement.pose(), visionMeasurement.timestamp(), visionMeasurement.stdDev());
+  // }
 }

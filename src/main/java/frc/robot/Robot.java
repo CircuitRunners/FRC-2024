@@ -8,26 +8,28 @@ import java.util.function.Supplier;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.lib.swerve.SwerveConfig;
 import frc.lib.utils.PathPlannerUtil;
 import frc.robot.Constants.DriverConstants;
-import frc.robot.Constants.FieldConstants;
-import frc.robot.Constants.SwerveConstants;
-import frc.robot.commands.AimAtSpeaker;
 import frc.robot.io.DriverControls;
 import frc.robot.io.OperatorControls;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
+import frc.robot.Constants.FieldConstants;
+import frc.robot.Constants.SwerveConstants;
+import frc.robot.commands.AimAtSpeaker;
 
 public class Robot extends TimedRobot {
   private Drive drive;
@@ -38,19 +40,21 @@ public class Robot extends TimedRobot {
   private OperatorControls operatorControls;
   private Command m_autonomousCommand;
   private final SendableChooser<Supplier<Command>> autoChooser = new SendableChooser<>();
-  private final Vision vision = new Vision(drive::addVisionMeasurement);
+  // private Vision vision;
 
 
   @Override
   public void robotInit() {
+    DataLogManager.start("logs");
     configureSubsystems();
+    // vision = new Vision(drive::addVisionMeasurement);
   }
   
   @Override
   public void driverStationConnected() {
     configureAutos();
     configureBindings();
-    addPeriodic(vision::run, 0.01);
+    // addPeriodic(vision::run, 0.01);
   }
 
   @Override
@@ -97,7 +101,13 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-  
+    driverControls.y().onTrue(drive.toggleSysIDMode());
+    driverControls.sysIdDynamicForward().whileTrue(drive.sysIdDynamic(Direction.kForward));
+    driverControls.sysIdDynamicReverse().whileTrue(drive.sysIdDynamic(Direction.kReverse));
+    driverControls.sysIdQuasistaticForward().whileTrue(drive.sysIdQuasistatic(Direction.kForward));
+    driverControls.sysIdQuasistaticReverse().whileTrue(drive.sysIdQuasistatic(Direction.kReverse));
+    driverControls.toAmp().whileTrue(AutoBuilder.pathfindToPose((DriverStation.getAlliance().get() == Alliance.Blue ? FieldConstants.kBlueAmpPose2d : FieldConstants.kRedAmpPose2d), SwerveConstants.pathConstraints));
+    driverControls.aimAtSpeaker().whileTrue(new AimAtSpeaker(drive, driverControls));
   }
 
   @Override
@@ -141,6 +151,13 @@ public class Robot extends TimedRobot {
     driverControls.toAmp().whileTrue(AutoBuilder.pathfindToPose((DriverStation.getAlliance().get() == Alliance.Blue ? FieldConstants.kBlueAmpPose2d : FieldConstants.kRedAmpPose2d), SwerveConstants.pathConstraints));
     // driverControls.toPickup().whileTrue(AutoBuilder.pathfindToPose((DriverStation.getAlliance().get() == Alliance.Blue ? FieldConstants.kBlue : FieldConstants.kRedAmpPose2d), SwerveConstants.pathConstraints));
     driverControls.aimAtSpeaker().whileTrue(new AimAtSpeaker(drive, driverControls));
+
+    // Tuning Buttons
+    driverControls.y().onTrue(drive.toggleSysIDMode());
+    driverControls.sysIdDynamicForward().whileTrue(drive.sysIdDynamic(Direction.kForward));
+    driverControls.sysIdDynamicReverse().whileTrue(drive.sysIdDynamic(Direction.kReverse));
+    driverControls.sysIdQuasistaticForward().whileTrue(drive.sysIdQuasistatic(Direction.kForward));
+    driverControls.sysIdQuasistaticReverse().whileTrue(drive.sysIdQuasistatic(Direction.kReverse));
 
     // ------------------------------- OPERATOR CONTROLS ---------------------------------------------------------
     operatorControls = new OperatorControls(DriverConstants.operatorPort);

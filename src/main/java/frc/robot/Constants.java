@@ -10,8 +10,6 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.apriltag.AprilTagFieldLayout;
-import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
@@ -278,9 +276,9 @@ public final class Constants {
             kXToAmp, kYToAmp, Rotation2d.fromDegrees(90));
             
         public static final Translation3d kRedAmpPose = new Translation3d(
-              kFieldLength.minus(kXToAmp), kFieldWidth.minus(kYToAmp), kZToAmp);
+              kFieldLength.minus(kXToAmp), kYToAmp, kZToAmp);
         public static final Pose2d kRedAmpPose2d = new Pose2d(
-            kRedAmpPose.getX(), kRedAmpPose.getY(), new Rotation2d());
+            kRedAmpPose.getX(), kRedAmpPose.getY(), Rotation2d.fromDegrees(90));
 
         /* stage constants */
         public static final double kBlueStageClearanceDs = Units.inchesToMeters(188.5);
