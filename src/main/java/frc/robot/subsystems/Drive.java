@@ -16,6 +16,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -69,7 +70,10 @@ public class Drive extends SubsystemBase {
         SwerveConstants.modulePositions);
 
     fieldUtil.setObjectGlobalPose("Target Pose", targetPose);
-
+    // System.out.println(" Front Left" + swerve.getModule(0));
+    // System.out.println(" Front Right" + swerve.getModule(1));
+    // System.out.println(" Back Left" + swerve.getModule(2));
+    // System.out.println(" Back Right" + swerve.getModule(3));
   }
 
   @Override
@@ -147,18 +151,18 @@ public class Drive extends SubsystemBase {
   }
   
 
-  public Command sysIdDynamic(Direction direction) {
-    return sysIdTranslator ? sysIdTranslation.dynamic(direction): sysIdRotation.dynamic(direction);
-  }
+  // public Command sysIdDynamic(Direction direction) {
+  //   return sysIdTranslator ? sysIdTranslation.dynamic(direction): sysIdRotation.dynamic(direction);
+  // }
 
-  public Command sysIdQuasistatic(Direction direction) {
-    return sysIdTranslator ? sysIdTranslation.quasistatic(direction) : sysIdRotation.quasistatic(direction);
-  }
+  // public Command sysIdQuasistatic(Direction direction) {
+  //   return sysIdTranslator ? sysIdTranslation.quasistatic(direction) : sysIdRotation.quasistatic(direction);
+  // }
 
 
-  public Command toggleSysIDMode() {
-    return Commands.runOnce(() -> sysIdTranslator = !sysIdTranslator);
-  }
+  // public Command toggleSysIDMode() {
+  //   return Commands.runOnce(() -> sysIdTranslator = !sysIdTranslator);
+  // }
 
   
   public void targetAngleDrive(Translation2d targetAngle, DriverControls controls) {

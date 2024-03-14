@@ -46,18 +46,18 @@ public class PathPlannerUtil {
         drive);
 
     NamedCommands.registerCommand("brake", drive.brakeCommand());
-    NamedCommands.registerCommand("pickUpNote", intake.runIntakeInCommand());
-    NamedCommands.registerCommand("intakeOut", intake.runIntakeOutCommand());
-    NamedCommands.registerCommand("stopIntake", intake.stopIntakeCommand());
-    NamedCommands.registerCommand("armLow", intake.setArmLowCommand());
-    NamedCommands.registerCommand("armHigh", intake.setArmHighCommand());
-    NamedCommands.registerCommand("shoot", shooter.runShooterOutCommand());
-    NamedCommands.registerCommand("shooterIn", shooter.runShooterInCommand());
-    NamedCommands.registerCommand("shooterLow", shooter.setArmIn());
-    NamedCommands.registerCommand("shooterHigh", shooter.setArmOut());
-    NamedCommands.registerCommand("elevatorHigh", Commands.print("elevatorHigh"));
-    NamedCommands.registerCommand("elevatorMid", Commands.print("elevatorMed"));
-    NamedCommands.registerCommand("elevatorLow", Commands.print("elevatorLow"));
+    // NamedCommands.registerCommand("pickUpNote", intake.runIntakeInCommand());
+    // NamedCommands.registerCommand("intakeOut", intake.runIntakeOutCommand());
+    // NamedCommands.registerCommand("stopIntake", intake.stopIntakeCommand());
+    // NamedCommands.registerCommand("armLow", intake.setArmLowCommand());
+    // NamedCommands.registerCommand("armHigh", intake.setArmHighCommand());
+    // NamedCommands.registerCommand("shoot", shooter.runShooterOutCommand());
+    // NamedCommands.registerCommand("shooterIn", shooter.runShooterInCommand());
+    // NamedCommands.registerCommand("shooterLow", shooter.setArmIn());
+    // NamedCommands.registerCommand("shooterHigh", shooter.setArmOut());
+    // NamedCommands.registerCommand("elevatorHigh", Commands.print("elevatorHigh"));
+    // NamedCommands.registerCommand("elevatorMid", Commands.print("elevatorMed"));
+    // NamedCommands.registerCommand("elevatorLow", Commands.print("elevatorLow"));
 
   }
 
