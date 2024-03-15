@@ -72,7 +72,7 @@ public class Drive extends SubsystemBase {
         SwerveConstants.modulePositions);
 
     fieldUtil.setObjectGlobalPose("Target Pose", targetPose);
-    System.out.println(" Front Left " + swerve.getModule(0).getCANcoder().getAbsolutePosition());
+    // System.out.println(" Front Left " + swerve.getModule(0).getCANcoder().getAbsolutePosition());
     // System.out.println(" Front Right" + swerve.getModule(1).getCANcoder().getAbsolutePosition());
     // System.out.println(" Back Left" + swerve.getModule(2).getCANcoder().getAbsolutePosition());
     // System.out.println(" Back Right" + swerve.getModule(3).getCANcoder().getAbsolutePosition());
