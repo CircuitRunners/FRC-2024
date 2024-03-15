@@ -208,6 +208,8 @@ public final class Constants {
     public static final double kP = 0;
     public static final double kI = 0;
     public static final double kD = 0;
+    public static final int tofId = 0;
+    public static final double tofThresholdMMS = Units.inchesToMeters(24) * 1000;
 
   }
 

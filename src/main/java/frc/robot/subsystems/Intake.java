@@ -1,6 +1,9 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.playingwithfusion.TimeOfFlight;
+import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -9,8 +12,9 @@ import frc.robot.Constants.IntakeConstants;
 
 public class Intake extends SubsystemBase { // i mostly updated this to match elevator.java's structure
   private TalonFX arm = new TalonFX(IntakeConstants.armId);
-  private TalonFX intake = new TalonFX(IntakeConstants.intakeId);
+  private CANSparkMax intake = new CANSparkMax(IntakeConstants.intakeId, MotorType.kBrushless);
   private PIDController armPID = new PIDController(IntakeConstants.kP, IntakeConstants.kI, IntakeConstants.kD);
+  private TimeOfFlight tof = new TimeOfFlight(IntakeConstants.tofId);
   private double targetAngle = 0;
 
   public Command runIntakeInCommand(){
@@ -42,6 +46,17 @@ public class Intake extends SubsystemBase { // i mostly updated this to match el
 
   public Command stopArmCommand(){
     return run(() -> moveArmToTargetPosition(0));
+  }
+
+  public Command autoIntake(){ 
+    return run(() -> {
+      if(tof.getRange() < IntakeConstants.tofThresholdMMS){
+        runIntakeInCommand().execute();
+      } else {
+        stopIntakeCommand().execute();
+      }
+    });
+  
   }
 
   //
