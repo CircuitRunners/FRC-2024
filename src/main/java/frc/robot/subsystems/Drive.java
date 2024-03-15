@@ -60,6 +60,8 @@ public class Drive extends SubsystemBase {
   public Drive(Swerve swerve) {
     SignalLogger.setPath("logs/sysid/drive");
     this.swerve = swerve;
+    resetGyroCommand();
+    
   }
 
   @Override
@@ -151,18 +153,18 @@ public class Drive extends SubsystemBase {
   }
   
 
-  // public Command sysIdDynamic(Direction direction) {
-  //   return sysIdTranslator ? sysIdTranslation.dynamic(direction): sysIdRotation.dynamic(direction);
-  // }
+  public Command sysIdDynamic(Direction direction) {
+    return sysIdTranslator ? sysIdTranslation.dynamic(direction): sysIdRotation.dynamic(direction);
+  }
 
-  // public Command sysIdQuasistatic(Direction direction) {
-  //   return sysIdTranslator ? sysIdTranslation.quasistatic(direction) : sysIdRotation.quasistatic(direction);
-  // }
+  public Command sysIdQuasistatic(Direction direction) {
+    return sysIdTranslator ? sysIdTranslation.quasistatic(direction) : sysIdRotation.quasistatic(direction);
+  }
 
 
-  // public Command toggleSysIDMode() {
-  //   return Commands.runOnce(() -> sysIdTranslator = !sysIdTranslator);
-  // }
+  public Command toggleSysIDMode() {
+    return Commands.runOnce(() -> sysIdTranslator = !sysIdTranslator);
+  }
 
   
   public void targetAngleDrive(Translation2d targetAngle, DriverControls controls) {

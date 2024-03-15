@@ -102,15 +102,15 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    // driverControls.y().onTrue(drive.toggleSysIDMode());
-    // driverControls.sysIdDynamicForward().whileTrue(drive.sysIdDynamic(Direction.kForward));
-    // driverControls.sysIdDynamicReverse().whileTrue(drive.sysIdDynamic(Direction.kReverse));
-    // driverControls.sysIdQuasistaticForward().whileTrue(drive.sysIdQuasistatic(Direction.kForward));
-    // driverControls.sysIdQuasistaticReverse().whileTrue(drive.sysIdQuasistatic(Direction.kReverse));
+    driverControls.y().onTrue(drive.toggleSysIDMode());
+    driverControls.sysIdDynamicForward().whileTrue(drive.sysIdDynamic(Direction.kForward));
+    driverControls.sysIdDynamicReverse().whileTrue(drive.sysIdDynamic(Direction.kReverse));
+    driverControls.sysIdQuasistaticForward().whileTrue(drive.sysIdQuasistatic(Direction.kForward));
+    driverControls.sysIdQuasistaticReverse().whileTrue(drive.sysIdQuasistatic(Direction.kReverse));
     driverControls.toAmp().whileTrue(AutoBuilder.pathfindToPose((DriverStation.getAlliance().get() == Alliance.Blue ? FieldConstants.kBlueAmpPose2d : FieldConstants.kRedAmpPose2d), SwerveConstants.pathConstraints));
     driverControls.aimAtSpeaker().whileTrue(new AimAtSpeaker(drive, driverControls));
   }
-
+  
   @Override
   public void teleopExit() {
   
@@ -140,23 +140,26 @@ public class Robot extends TimedRobot {
   }
 
   private void configureBindings() {
-
+    
     // ------------------------------- DRIVER CONTROLS ---------------------------------------------------------
     driverControls = new DriverControls(DriverConstants.driverPort);
     drive.setDefaultCommand(
-        drive.driveFieldCentricCommand(() -> SwerveConfig.toChassisSpeeds(driverControls, drive)));
-    driverControls.increaseLimit().onTrue(drive.increaseLimitCommand());
-    driverControls.robotRelative()
-        .whileTrue(drive.driveRobotCentricCommand(() -> SwerveConfig.toChassisSpeeds(driverControls, drive)));
-    driverControls.resetGyro().onTrue(drive.resetGyroCommand());
-    driverControls.toAmp().whileTrue(AutoBuilder.pathfindToPose((DriverStation.getAlliance().get() == Alliance.Blue ? FieldConstants.kBlueAmpPose2d : FieldConstants.kRedAmpPose2d), SwerveConstants.pathConstraints));
-    // driverControls.toPickup().whileTrue(AutoBuilder.pathfindToPose((DriverStation.getAlliance().get() == Alliance.Blue ? FieldConstants.kBlue : FieldConstants.kRedAmpPose2d), SwerveConstants.pathConstraints));
-    driverControls.aimAtSpeaker().whileTrue(new AimAtSpeaker(drive, driverControls));
-
-    // Tuning Buttons
-    // driverControls.y().onTrue(drive.4e().whileTrue(drive.sysIdQuasistatic(Direction.kReverse));
-
-    // ------------------------------- OPERATOR CONTROLS ---------------------------------------------------------
+      drive.driveFieldCentricCommand(() -> SwerveConfig.toChassisSpeeds(driverControls, drive)));
+      driverControls.increaseLimit().onTrue(drive.increaseLimitCommand());
+      driverControls.robotRelative()
+      .whileTrue(drive.driveRobotCentricCommand(() -> SwerveConfig.toChassisSpeeds(driverControls, drive)));
+      driverControls.resetGyro().onTrue(drive.resetGyroCommand());
+      driverControls.toAmp().whileTrue(AutoBuilder.pathfindToPose((DriverStation.getAlliance().get() == Alliance.Blue ? FieldConstants.kBlueAmpPose2d : FieldConstants.kRedAmpPose2d), SwerveConstants.pathConstraints));
+      // driverControls.toPickup().whileTrue(AutoBuilder.pathfindToPose((DriverStation.getAlliance().get() == Alliance.Blue ? FieldConstants.kBlue : FieldConstants.kRedAmpPose2d), SwerveConstants.pathConstraints));
+      driverControls.aimAtSpeaker().whileTrue(new AimAtSpeaker(drive, driverControls));
+      
+      // ------------------------------ TUNING CONTROLS ---------------------------
+      driverControls.y().onTrue(drive.toggleSysIDMode());
+      driverControls.sysIdDynamicForward().whileTrue(drive.sysIdDynamic(Direction.kForward));
+      driverControls.sysIdDynamicReverse().whileTrue(drive.sysIdDynamic(Direction.kReverse));
+      driverControls.sysIdQuasistaticForward().whileTrue(drive.sysIdQuasistatic(Direction.kForward));
+      driverControls.sysIdQuasistaticReverse().whileTrue(drive.sysIdQuasistatic(Direction.kReverse));
+      // ------------------------------- OPERATOR CONTROLS ---------------------------------------------------------
     // operatorControls = new OperatorControls(DriverConstants.operatorPort);
 
     // operatorControls.toggleElevatorManual().onTrue(elevator.toggleManualCommand());
