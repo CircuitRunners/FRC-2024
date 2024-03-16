@@ -12,24 +12,24 @@ public class OperatorControls extends CommandXboxController {
   }
 
   // ---------------- Elevator ----------------
-  public Trigger setElevatorHigh() {
-    return povUp();
-  }
+  // public Trigger setElevatorHigh() {
+  //   return povUp();
+  // }
   
-  public Trigger setElevatorMid() {
-    return povLeft();
-  }
-  public Trigger setElevatorLow() {
-    return povDown();
-  }
+  // public Trigger setElevatorMid() {
+  //   return povLeft();
+  // }
+  // public Trigger setElevatorLow() {
+  //   return povDown();
+  // }
 
-  public Trigger toggleElevatorManual() {
-    return start();
-  }
+  // public Trigger toggleElevatorManual() {
+  //   return start();
+  // }
 
-  public double elevatorManual() {
-    return MathUtil.applyDeadband(-getLeftY(), DriverConstants.stickDeadband);
-  }
+  // public double elevatorManual() {
+  //   return MathUtil.applyDeadband(-getLeftY(), DriverConstants.stickDeadband);
+  // }
 
   // ---------------- Shooter ----------------
 
@@ -60,7 +60,7 @@ public class OperatorControls extends CommandXboxController {
 
   // ---------------- Intake ----------------
 
-  public Trigger runIntakeIn(){
+  public Trigger autoIntake(){
     return rightBumper();
   }
 
@@ -72,16 +72,19 @@ public class OperatorControls extends CommandXboxController {
     return back();
   }
 
-  public double intakeManual(){
-    return MathUtil.applyDeadband(-getRightX(), DriverConstants.stickDeadband);
+  public Trigger armManualUp(){
+    return povUp();
+  }
+
+  public Trigger armManualDown(){
+    return povDown();
   }
 
   public Trigger setArmHigh(){
-    return new Trigger(() -> MathUtil.applyDeadband(-getRightX(), DriverConstants.stickDeadband) > 0);
+    return new Trigger(() -> MathUtil.applyDeadband(-getRightY(), DriverConstants.stickDeadband) > 0);
   }
   
   public Trigger setArmLow(){
-    return new Trigger(() -> MathUtil.applyDeadband(-getRightX(), DriverConstants.stickDeadband) < 0);
+    return new Trigger(() -> MathUtil.applyDeadband(-getRightY(), DriverConstants.stickDeadband) < 0);
   }
-
 }

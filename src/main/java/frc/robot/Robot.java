@@ -21,16 +21,17 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.lib.swerve.SwerveConfig;
 import frc.lib.utils.PathPlannerUtil;
 import frc.robot.Constants.DriverConstants;
+import frc.robot.Constants.FieldConstants;
+import frc.robot.Constants.SwerveConstants;
+import frc.robot.commands.AimAtSpeaker;
+import frc.robot.commands.AutoIntake;
+import frc.robot.generated.TunerConstants;
 import frc.robot.io.DriverControls;
 import frc.robot.io.OperatorControls;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
-import frc.robot.Constants.FieldConstants;
-import frc.robot.Constants.SwerveConstants;
-import frc.robot.commands.AimAtSpeaker;
-import frc.robot.generated.TunerConstants;
 
 public class Robot extends TimedRobot {
   private Drive drive;
@@ -109,7 +110,7 @@ public class Robot extends TimedRobot {
     driverControls.sysIdQuasistaticReverse().whileTrue(drive.sysIdQuasistatic(Direction.kReverse));
     driverControls.toAmp().whileTrue(AutoBuilder.pathfindToPose((DriverStation.getAlliance().get() == Alliance.Blue ? FieldConstants.kBlueAmpPose2d : FieldConstants.kRedAmpPose2d), SwerveConstants.pathConstraints));
     driverControls.aimAtSpeaker().whileTrue(new AimAtSpeaker(drive, driverControls));
-    CommandScheduler.getInstance().schedule(intake.autoIntake());
+    
   }
   
   @Override
@@ -175,17 +176,20 @@ public class Robot extends TimedRobot {
     // operatorControls.runShooterOut().whileTrue(shooter.runShooterOutCommand());
     // operatorControls.runShooterIn().whileTrue(shooter.runShooterInCommand());
 
-    // operatorControls.runIntakeIn().whileTrue(intake.runIntakeInCommand());
-    // operatorControls.runIntakeOut().whileTrue(intake.runIntakeOutCommand());
-    // operatorControls.setArmHigh().onTrue(intake.setArmHighCommand());
-    // operatorControls.setArmLow().onTrue(intake.setArmLowCommand());
+    operatorControls.autoIntake().whileTrue(new AutoIntake(intake));
+    operatorControls.runIntakeOut().whileTrue(intake.runIntakeOutCommand());
+    operatorControls.setArmHigh().onTrue(intake.setArmHighCommand());
+    operatorControls.setArmLow().onTrue(intake.setArmLowCommand());
+    operatorControls.armManualDown().whileTrue(intake.moveArmManualDown());
+    operatorControls.armManualUp().whileTrue(intake.moveArmManualUp());
+    
 
   }
 
   private void configureSubsystems() {
     drive = new Drive(TunerConstants.DriveTrain);
     // elevator = new Elevator();
-    // intake = new Intake();
+    intake = new Intake();
     // shooter = new Shooter();
   }
 
