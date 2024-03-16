@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.SwerveConstants;
+import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
@@ -34,7 +35,7 @@ public class PathPlannerUtil {
   public static void configure(Drive drive, Intake intake, Shooter shooter, Elevator elevator) {
     HolonomicPathFollowerConfig config = new HolonomicPathFollowerConfig(SwerveConstants.translationalPID,
         SwerveConstants.rotationalPID,
-        SwerveConstants.maxModuleVelocityMPS, SwerveConstants.driveBaseRadiusMeter, new ReplanningConfig(true, true));
+        TunerConstants.kSpeedAt12VoltsMps, SwerveConstants.driveBaseRadiusMeter, new ReplanningConfig(true, true));
 
     AutoBuilder.configureHolonomic(
         drive::getPose,
@@ -47,17 +48,26 @@ public class PathPlannerUtil {
 
     NamedCommands.registerCommand("brake", drive.brakeCommand());
     // NamedCommands.registerCommand("pickUpNote", intake.runIntakeInCommand());
+    NamedCommands.registerCommand("pickUpNote", Commands.print("Running Intake In"));
     // NamedCommands.registerCommand("intakeOut", intake.runIntakeOutCommand());
+    NamedCommands.registerCommand("intakeOut", Commands.print("Running Intake Out"));
     // NamedCommands.registerCommand("stopIntake", intake.stopIntakeCommand());
+    NamedCommands.registerCommand("stopIntake", Commands.print("Stopping Intake"));
     // NamedCommands.registerCommand("armLow", intake.setArmLowCommand());
+    NamedCommands.registerCommand("armLow", Commands.print("Setting intake Arm Low"));
     // NamedCommands.registerCommand("armHigh", intake.setArmHighCommand());
+    NamedCommands.registerCommand("armHigh", Commands.print("Setting intake Arm High"));
     // NamedCommands.registerCommand("shoot", shooter.runShooterOutCommand());
+    NamedCommands.registerCommand("shoot", Commands.print("Running Shooter Out"));
     // NamedCommands.registerCommand("shooterIn", shooter.runShooterInCommand());
+    NamedCommands.registerCommand("shooterIn", Commands.print("Running SHooter in"));
     // NamedCommands.registerCommand("shooterLow", shooter.setArmIn());
+    NamedCommands.registerCommand("shooterLow", Commands.print("Setting Shooter Low"));
     // NamedCommands.registerCommand("shooterHigh", shooter.setArmOut());
-    // NamedCommands.registerCommand("elevatorHigh", Commands.print("elevatorHigh"));
-    // NamedCommands.registerCommand("elevatorMid", Commands.print("elevatorMed"));
-    // NamedCommands.registerCommand("elevatorLow", Commands.print("elevatorLow"));
+    NamedCommands.registerCommand("shooterHigh", Commands.print("Setting Shooter High"));
+    NamedCommands.registerCommand("elevatorHigh", Commands.print("elevatorHigh"));
+    NamedCommands.registerCommand("elevatorMid", Commands.print("elevatorMed"));
+    NamedCommands.registerCommand("elevatorLow", Commands.print("elevatorLow"));
 
   }
 
@@ -71,7 +81,8 @@ public class PathPlannerUtil {
     }
   }
 
-  public static List<String> getAutos() {
+  public static List<String> 
+  getAutos() {
     var path = Path.of(Filesystem.getDeployDirectory().getAbsolutePath(), "pathplanner");
     try (Stream<Path> stream = Files.walk(path)) {
       return stream

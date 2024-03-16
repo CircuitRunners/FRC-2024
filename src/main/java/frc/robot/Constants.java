@@ -26,7 +26,6 @@ import frc.robot.generated.TunerConstants;
 
 public final class Constants {
   public static final class SwerveConstants {
-    public static double limit = 0.8;
     public static final int pigeonID = 1;
     public static final boolean invertGyro = true; // Always ensure Gyro is CCW+ CW-
 
@@ -74,29 +73,29 @@ public final class Constants {
     public static final double closedLoopRamp = 0.0;
 
     /* Angle Motor PID Values */
-    public static final double angleKP = 100;
-    public static final double angleKI = 0.;
-    public static final double angleKD = 0.2;
+    public static final double angleKP = TunerConstants.steerGains.kP;
+    public static final double angleKI = TunerConstants.steerGains.kI;
+    public static final double angleKD = TunerConstants.steerGains.kD;
     public static final double angleKF = 0.0;
 
     /* Angle Motor SYSID values */
-    public static final double angleKS = 0;
-    public static final double angleKV = 1.5;
-    public static final double angleKG = 0.0;
-    public static final double angleKA = 0.0;
+    public static final double angleKS = TunerConstants.steerGains.kS;
+    public static final double angleKV = TunerConstants.steerGains.kV;
+    public static final double angleKG = TunerConstants.steerGains.kG;
+    public static final double angleKA = TunerConstants.steerGains.kA;
 
     /* Drive Motor PID Values */
-    public static final double driveKP = 3; //TODO: This must be tuned to specific robot
-    public static final double driveKI = 0;
-    public static final double driveKD = 0;
+    public static final double driveKP = TunerConstants.driveGains.kP; //TODO: This must be tuned to specific robot
+    public static final double driveKI = TunerConstants.driveGains.kI;
+    public static final double driveKD = TunerConstants.driveGains.kD;
     public static final double driveKF = 0;
 
     /* Drive Motor Characterization Values 
      * Divide SYSID values by 12 to convert from volts to percent output for CTRE */
-    public static final double driveKS = (0); //TODO: This must be tuned to specific robot
-    public static final double driveKV = (0);
-    public static final double driveKG = (0);
-    public static final double driveKA = (0);
+    public static final double driveKS = TunerConstants.driveGains.kS; //TODO: This must be tuned to specific robot
+    public static final double driveKV = TunerConstants.driveGains.kV;
+    public static final double driveKG = TunerConstants.driveGains.kG;
+    public static final double driveKA = TunerConstants.driveGains.kA;
 
     /* Swerve Profiling Values */
     /** Meters per Second */

@@ -29,6 +29,7 @@ import frc.lib.utils.PathPlannerUtil;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.io.DriverControls;
 public class Drive extends SubsystemBase {
+  public static double limit = 0.6;
   private Swerve swerve;
   private FieldUtil fieldUtil = FieldUtil.getField();
   private boolean sysIdTranslator = true;
@@ -108,11 +109,15 @@ public class Drive extends SubsystemBase {
 
   /* Speed Control */
   public void increaseLimit() {
-    SwerveConstants.limit += SwerveConstants.limit < 1 ? 0.2 : 0;
+    if (limit < 1) {
+      limit += 0.2;
+    }
   }
 
   public void decreaseLimit() {
-    SwerveConstants.limit -= SwerveConstants.limit > 0.2 ? 0.2 : 0;
+    if (limit > 0.2) {
+      limit -= 0.2;
+    }
   }
 
   public Command increaseLimitCommand() {

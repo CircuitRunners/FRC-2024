@@ -8,7 +8,7 @@ import java.util.function.Supplier;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 
-import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -17,14 +17,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.lib.swerve.SwerveConfig;
 import frc.lib.utils.PathPlannerUtil;
 import frc.robot.Constants.DriverConstants;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.commands.AimAtSpeaker;
-import frc.robot.commands.AutoIntake;
 import frc.robot.generated.TunerConstants;
 import frc.robot.io.DriverControls;
 import frc.robot.io.OperatorControls;
@@ -47,7 +45,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
-    DataLogManager.start("logs");
+    // DataLogManager.start("logs");
     configureSubsystems();
     // vision = new Vision(drive::addVisionMeasurement);
   }
@@ -77,7 +75,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = Commands.none();
+    m_autonomousCommand = autoChooser.getSelected().get();
 
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
@@ -103,14 +101,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    driverControls.y().onTrue(drive.toggleSysIDMode());
-    driverControls.sysIdDynamicForward().whileTrue(drive.sysIdDynamic(Direction.kForward));
-    driverControls.sysIdDynamicReverse().whileTrue(drive.sysIdDynamic(Direction.kReverse));
-    driverControls.sysIdQuasistaticForward().whileTrue(drive.sysIdQuasistatic(Direction.kForward));
-    driverControls.sysIdQuasistaticReverse().whileTrue(drive.sysIdQuasistatic(Direction.kReverse));
-    driverControls.toAmp().whileTrue(AutoBuilder.pathfindToPose((DriverStation.getAlliance().get() == Alliance.Blue ? FieldConstants.kBlueAmpPose2d : FieldConstants.kRedAmpPose2d), SwerveConstants.pathConstraints));
-    driverControls.aimAtSpeaker().whileTrue(new AimAtSpeaker(drive, driverControls));
-    
   }
   
   @Override
@@ -134,7 +124,8 @@ public class Robot extends TimedRobot {
 
   private void configureAutos() {
     PathPlannerUtil.configure(drive, intake, shooter, elevator);
-    autoChooser.setDefaultOption("Do Nothing", () -> Commands.none());
+    autoChooser.setDefaultOption("Do Nothing", () -> Commands.print("Doing Nothing"));
+    autoChooser.addOption("Nick's Taxi Service", () -> drive.driveRobotCentricCommand(() -> new ChassisSpeeds(0.5, 0, 0)).withTimeout(4));
     PathPlannerUtil.getAutos().forEach(path -> {
       autoChooser.addOption(path, () -> PathPlannerUtil.getAutoCommand(path));
     });
@@ -147,7 +138,9 @@ public class Robot extends TimedRobot {
     driverControls = new DriverControls(DriverConstants.driverPort);
     drive.setDefaultCommand(
       drive.driveFieldCentricCommand(() -> SwerveConfig.toChassisSpeeds(driverControls, drive)));
-      driverControls.increaseLimit().onTrue(drive.increaseLimitCommand());
+      driverControls.increaseLimit()
+      .onTrue(Commands.runOnce(() -> Drive.limit = 1.0))
+      .onFalse(Commands.runOnce(() -> Drive.limit = 0.6));
       driverControls.robotRelative()
       .whileTrue(drive.driveRobotCentricCommand(() -> SwerveConfig.toChassisSpeeds(driverControls, drive)));
       driverControls.resetGyro().onTrue(drive.resetGyroCommand());
@@ -156,11 +149,11 @@ public class Robot extends TimedRobot {
       driverControls.aimAtSpeaker().whileTrue(new AimAtSpeaker(drive, driverControls));
       
       // ------------------------------ TUNING CONTROLS ---------------------------
-      driverControls.y().onTrue(drive.toggleSysIDMode());
-      driverControls.sysIdDynamicForward().whileTrue(drive.sysIdDynamic(Direction.kForward));
-      driverControls.sysIdDynamicReverse().whileTrue(drive.sysIdDynamic(Direction.kReverse));
-      driverControls.sysIdQuasistaticForward().whileTrue(drive.sysIdQuasistatic(Direction.kForward));
-      driverControls.sysIdQuasistaticReverse().whileTrue(drive.sysIdQuasistatic(Direction.kReverse));
+      // driverControls.y().onTrue(drive.toggleSysIDMode());
+      // driverControls.sysIdDynamicForward().whileTrue(drive.sysIdDynamic(Direction.kForward));
+      // driverControls.sysIdDynamicReverse().whileTrue(drive.sysIdDynamic(Direction.kReverse));
+      // driverControls.sysIdQuasistaticForward().whileTrue(drive.sysIdQuasistatic(Direction.kForward));
+      // driverControls.sysIdQuasistaticReverse().whileTrue(drive.sysIdQuasistatic(Direction.kReverse));
       // ------------------------------- OPERATOR CONTROLS ---------------------------------------------------------
     // operatorControls = new OperatorControls(DriverConstants.operatorPort);
 
@@ -176,25 +169,25 @@ public class Robot extends TimedRobot {
     // operatorControls.runShooterOut().whileTrue(shooter.runShooterOutCommand());
     // operatorControls.runShooterIn().whileTrue(shooter.runShooterInCommand());
 
-    operatorControls.autoIntake().whileTrue(new AutoIntake(intake));
-    operatorControls.runIntakeOut().whileTrue(intake.runIntakeOutCommand());
-    operatorControls.setArmHigh().onTrue(intake.setArmHighCommand());
-    operatorControls.setArmLow().onTrue(intake.setArmLowCommand());
-    operatorControls.armManualDown().whileTrue(intake.moveArmManualDown());
-    operatorControls.armManualUp().whileTrue(intake.moveArmManualUp());
+    // operatorControls.autoIntake().whileTrue(new AutoIntake(intake));
+    // operatorControls.runIntakeOut().whileTrue(intake.runIntakeOutCommand());
+    // operatorControls.setArmHigh().onTrue(intake.setArmHighCommand());
+    // operatorControls.setArmLow().onTrue(intake.setArmLowCommand());
+    // operatorControls.armManualDown().whileTrue(intake.moveArmManualDown());
+    // operatorControls.armManualUp().whileTrue(intake.moveArmManualUp());
 
-    // SysID for intake arm
-    operatorControls.armDynamicForward().whileTrue(intake.sysIdDnamicCommand(Direction.kForward));
-    operatorControls.armDynamicReverse().whileTrue(intake.sysIdDnamicCommand(Direction.kReverse));
-    operatorControls.armQuasistaticForward().whileTrue(intake.sysIdQuasistaticCommand(Direction.kForward));
-    operatorControls.armQuasistaticReverse().whileTrue(intake.sysIdQuasistaticCommand(Direction.kReverse));   
+    // // SysID for intake arm
+    // operatorControls.armDynamicForward().whileTrue(intake.sysIdDnamicCommand(Direction.kForward));
+    // operatorControls.armDynamicReverse().whileTrue(intake.sysIdDnamicCommand(Direction.kReverse));
+    // operatorControls.armQuasistaticForward().whileTrue(intake.sysIdQuasistaticCommand(Direction.kForward));
+    // operatorControls.armQuasistaticReverse().whileTrue(intake.sysIdQuasistaticCommand(Direction.kReverse));   
 
   }
 
   private void configureSubsystems() {
     drive = new Drive(TunerConstants.DriveTrain);
     // elevator = new Elevator();
-    intake = new Intake();
+    // intake = new Intake();
     // shooter = new Shooter();
   }
 

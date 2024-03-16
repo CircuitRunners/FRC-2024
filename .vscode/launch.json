@@ -6,6 +6,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "Main",
+      "request": "launch",
+      "mainClass": "frc.robot.Main",
+      "projectName": "FRC-2024"
+    },
+    {
+      "type": "java",
       "name": "Vision2",
       "request": "launch",
       "mainClass": "frc.robot.Vision2",

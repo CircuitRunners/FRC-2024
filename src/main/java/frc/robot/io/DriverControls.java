@@ -1,46 +1,30 @@
 package frc.robot.io;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.DriverConstants;
 import frc.robot.Constants.SwerveConstants;
+import frc.robot.subsystems.Drive;
 
 public class DriverControls extends CommandXboxController {
-  private double inverted;
   public DriverControls(int port) {
     super(port);
     
   }
 
   public double driveForward() {
-    if (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue) {
-      inverted = -1;
-    } else {
-      inverted = 1;
-    }
-    return MathUtil.applyDeadband(inverted * getLeftY(), DriverConstants.stickDeadband) * SwerveConstants.limit
+    return MathUtil.applyDeadband(-getLeftY(), DriverConstants.stickDeadband) * Drive.limit
         * SwerveConstants.maxVelocityMPS;
   }
 
   public double driveStrafe() {
-    if (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue) {
-      inverted = -1;
-    } else {
-      inverted = 1;
-    }
-    return MathUtil.applyDeadband(inverted * getLeftX(), DriverConstants.stickDeadband) * SwerveConstants.limit
+    return MathUtil.applyDeadband(-getLeftX(), DriverConstants.stickDeadband) * Drive.limit
         * SwerveConstants.maxVelocityMPS;
   }
 
   public double driveRotation() {
-    if (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue) {
-      inverted = -1;
-    } else {
-      inverted = 1;
-    }
-    return MathUtil.applyDeadband(-getRightX(), DriverConstants.stickDeadband) * SwerveConstants.limit
+    return MathUtil.applyDeadband(-getRightX(), DriverConstants.stickDeadband) * Drive.limit
         * SwerveConstants.maxAngularVelocityRPS;
   }
 

@@ -68,9 +68,6 @@ public class OperatorControls extends CommandXboxController {
     return leftBumper();
   }
 
-  public Trigger toggleIntakeManual(){
-    return back();
-  }
 
   public Trigger armManualUp(){
     return povUp();
