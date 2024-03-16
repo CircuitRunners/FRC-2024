@@ -87,4 +87,20 @@ public class OperatorControls extends CommandXboxController {
   public Trigger setArmLow(){
     return new Trigger(() -> MathUtil.applyDeadband(-getRightY(), DriverConstants.stickDeadband) < 0);
   }
+
+  public Trigger armDynamicForward() {
+    return y();
+  }
+
+  public Trigger armDynamicReverse() {
+    return a();
+  }
+
+  public Trigger armQuasistaticForward() {
+    return x();
+  }
+
+  public Trigger armQuasistaticReverse() {
+    return b();
+  }
 }

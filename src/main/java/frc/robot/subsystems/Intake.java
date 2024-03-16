@@ -74,8 +74,16 @@ public class Intake extends SubsystemBase { // i mostly updated this to match el
 
 
   //
-
+  @Override
   public void periodic(){
     arm.set(armPID.calculate(arm.getEncoder().getPosition(), targetAngle));
+  }
+
+  public Command sysIdDnamicCommand(Direction direction){
+    return routine.dynamic(direction);
+  }
+
+  public Command sysIdQuasistaticCommand(Direction direction){
+    return routine.quasistatic(direction);
   }
 }

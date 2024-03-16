@@ -182,7 +182,12 @@ public class Robot extends TimedRobot {
     operatorControls.setArmLow().onTrue(intake.setArmLowCommand());
     operatorControls.armManualDown().whileTrue(intake.moveArmManualDown());
     operatorControls.armManualUp().whileTrue(intake.moveArmManualUp());
-    
+
+    // SysID for intake arm
+    operatorControls.armDynamicForward().whileTrue(intake.sysIdDnamicCommand(Direction.kForward));
+    operatorControls.armDynamicReverse().whileTrue(intake.sysIdDnamicCommand(Direction.kReverse));
+    operatorControls.armQuasistaticForward().whileTrue(intake.sysIdQuasistaticCommand(Direction.kForward));
+    operatorControls.armQuasistaticReverse().whileTrue(intake.sysIdQuasistaticCommand(Direction.kReverse));   
 
   }
 
