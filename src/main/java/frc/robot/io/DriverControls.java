@@ -1,6 +1,7 @@
 package frc.robot.io;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.DriverConstants;
@@ -8,19 +9,27 @@ import frc.robot.Constants.SwerveConstants;
 import frc.robot.subsystems.Drive;
 
 public class DriverControls extends CommandXboxController {
+
+  private final SlewRateLimiter m_forwardLimiter, m_leftLimiter;
+
   public DriverControls(int port) {
+
     super(port);
-    
+
+    m_forwardLimiter = new SlewRateLimiter(5, -10, 0);
+    m_leftLimiter = new SlewRateLimiter(5, -10, 0);
   }
 
   public double driveForward() {
-    return MathUtil.applyDeadband(-getLeftY(), DriverConstants.stickDeadband) * Drive.limit
-        * SwerveConstants.maxVelocityMPS;
+    double input = MathUtil.applyDeadband(-getLeftY(), DriverConstants.stickDeadband);
+    return m_forwardLimiter.calculate(Math.abs(input)) * Drive.limit
+        * SwerveConstants.maxVelocityMPS * Math.signum(input);
   }
 
   public double driveStrafe() {
-    return MathUtil.applyDeadband(-getLeftX(), DriverConstants.stickDeadband) * Drive.limit
-        * SwerveConstants.maxVelocityMPS;
+    double input = MathUtil.applyDeadband(-getLeftX(), DriverConstants.stickDeadband);
+    return m_leftLimiter.calculate(Math.abs(input)) * Drive.limit
+        * SwerveConstants.maxVelocityMPS * Math.signum(input);
   }
 
   public double driveRotation() {

@@ -99,7 +99,7 @@ public final class Constants {
 
     /* Swerve Profiling Values */
     /** Meters per Second */
-    public static final double maxVelocityMPS = 4.48; //TODO: 48 must be tuned to specific robot
+    public static final double maxVelocityMPS = TunerConstants.kSpeedAt12VoltsMps; //TODO: 48 must be tuned to specific robot
     public static final double maxModuleVelocityMPS = maxVelocityMPS;
 
     public static final double maxModuleAccelerationMPSSq = 2.0; //TODO: This must be tuned to specific robot
