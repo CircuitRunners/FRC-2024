@@ -66,20 +66,19 @@ public class Drive extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    Pose2d targetPose = PathPlannerUtil.getCurrentTargetPose();
-    fieldUtil.setSwerveRobotPose(swerve.getPose2d(), swerve.getModuleStates(),
-        SwerveConstants.modulePositions);
-
-    fieldUtil.setObjectGlobalPose("Target Pose", targetPose);
     // System.out.println(" Front Left " + swerve.getModule(0).getCANcoder().getAbsolutePosition());
     // System.out.println(" Front Right" + swerve.getModule(1).getCANcoder().getAbsolutePosition());
     // System.out.println(" Back Left" + swerve.getModule(2).getCANcoder().getAbsolutePosition());
     // System.out.println(" Back Right" + swerve.getModule(3).getCANcoder().getAbsolutePosition());
   }
-
+  
   @Override
   public void simulationPeriodic() {
     // This method will be called once per scheduler run during simulation
+    Pose2d targetPose = PathPlannerUtil.getCurrentTargetPose();
+    fieldUtil.setSwerveRobotPose(swerve.getPose2d(), swerve.getModuleStates(),
+        SwerveConstants.modulePositions);
+    fieldUtil.setObjectGlobalPose("Target Pose", targetPose);
     swerve.updateSimState(0.02, 12);
   }
 
