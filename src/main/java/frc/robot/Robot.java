@@ -144,9 +144,9 @@ public class Robot extends TimedRobot {
       driverControls.robotRelative()
       .whileTrue(drive.driveRobotCentricCommand(() -> SwerveConfig.toChassisSpeeds(driverControls, drive)));
       driverControls.resetGyro().onTrue(drive.resetGyroCommand());
-      driverControls.toAmp().whileTrue(AutoBuilder.pathfindToPose((DriverStation.getAlliance().get() == Alliance.Blue ? FieldConstants.kBlueAmpPose2d : FieldConstants.kRedAmpPose2d), SwerveConstants.pathConstraints));
+//      driverControls.toAmp().whileTrue(AutoBuilder.pathfindToPose((DriverStation.getAlliance().get() == Alliance.Blue ? FieldConstants.kBlueAmpPose2d : FieldConstants.kRedAmpPose2d), SwerveConstants.pathConstraints));
       // driverControls.toPickup().whileTrue(AutoBuilder.pathfindToPose((DriverStation.getAlliance().get() == Alliance.Blue ? FieldConstants.kBlue : FieldConstants.kRedAmpPose2d), SwerveConstants.pathConstraints));
-      driverControls.aimAtSpeaker().whileTrue(new AimAtSpeaker(drive, driverControls));
+//      driverControls.aimAtSpeaker().whileTrue(new AimAtSpeaker(drive, driverControls));
       
       // ------------------------------ TUNING CONTROLS ---------------------------
       // driverControls.y().onTrue(drive.toggleSysIDMode());
