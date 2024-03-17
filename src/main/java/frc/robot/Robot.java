@@ -6,11 +6,7 @@ package frc.robot;
 
 import java.util.function.Supplier;
 
-import com.pathplanner.lib.auto.AutoBuilder;
-
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -20,9 +16,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.swerve.SwerveConfig;
 import frc.lib.utils.PathPlannerUtil;
 import frc.robot.Constants.DriverConstants;
-import frc.robot.Constants.FieldConstants;
-import frc.robot.Constants.SwerveConstants;
-import frc.robot.commands.AimAtSpeaker;
 import frc.robot.generated.TunerConstants;
 import frc.robot.io.DriverControls;
 import frc.robot.io.OperatorControls;
@@ -138,9 +131,9 @@ public class Robot extends TimedRobot {
     driverControls = new DriverControls(DriverConstants.driverPort);
     drive.setDefaultCommand(
       drive.driveFieldCentricCommand(() -> SwerveConfig.toChassisSpeeds(driverControls, drive)));
-      driverControls.increaseLimit()
-      .onTrue(Commands.runOnce(() -> Drive.limit = 1.0))
-      .onFalse(Commands.runOnce(() -> Drive.limit = 0.6));
+      // driverControls.increaseLimit()
+      // .onTrue(Commands.runOnce(() -> Drive.limit = 1.0))
+      // .onFalse(Commands.runOnce(() -> Drive.limit = 0.6));
       driverControls.robotRelative()
       .whileTrue(drive.driveRobotCentricCommand(() -> SwerveConfig.toChassisSpeeds(driverControls, drive)));
       driverControls.resetGyro().onTrue(drive.resetGyroCommand());

@@ -12,6 +12,7 @@ import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest.SysIdSwerveRotation;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest.SysIdSwerveTranslation;
 
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -29,7 +30,7 @@ import frc.lib.utils.PathPlannerUtil;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.io.DriverControls;
 public class Drive extends SubsystemBase {
-  public static double limit = 0.6;
+  public static double limit = 1.0;
   private Swerve swerve;
   private FieldUtil fieldUtil = FieldUtil.getField();
   private boolean sysIdTranslator = true;
@@ -55,12 +56,17 @@ public class Drive extends SubsystemBase {
       (volts) -> swerve.setControl(rotation.withVolts(volts)),
       null,
       this));
+
+      private SlewRateLimiter accLimiter;
+
   
   /** Creates a new Drive. */
   public Drive(Swerve swerve) {
     SignalLogger.setPath("logs/sysid/drive");
     this.swerve = swerve;
 //    resetGyroCommand();
+  
+    accLimiter = new SlewRateLimiter(5, -10, 0);
   }
 
   @Override
@@ -85,15 +91,15 @@ public class Drive extends SubsystemBase {
   /* Drivebase Control */
   public void driveFieldCentric(ChassisSpeeds speeds) {
     swerve.setControl(SwerveConfig.drive
-        .withVelocityX(speeds.vxMetersPerSecond)
-        .withVelocityY(speeds.vyMetersPerSecond)
+        .withVelocityX(accLimiter.calculate(speeds.vxMetersPerSecond))
+        .withVelocityY(accLimiter.calculate(speeds.vyMetersPerSecond))
         .withRotationalRate(speeds.omegaRadiansPerSecond));
   }
 
   public void driveRobotCentric(ChassisSpeeds speeds) {
     swerve.setControl(SwerveConfig.robotCentric
-        .withVelocityX(speeds.vxMetersPerSecond)
-        .withVelocityY(speeds.vyMetersPerSecond)
+        .withVelocityX(accLimiter.calculate(speeds.vxMetersPerSecond))
+        .withVelocityY(accLimiter.calculate(speeds.vyMetersPerSecond))
         .withRotationalRate(speeds.omegaRadiansPerSecond));
   }
 
