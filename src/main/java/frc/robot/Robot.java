@@ -118,7 +118,7 @@ public class Robot extends TimedRobot {
   private void configureAutos() {
     PathPlannerUtil.configure(drive, intake, shooter, elevator);
     autoChooser.setDefaultOption("Do Nothing", () -> Commands.print("Doing Nothing"));
-    autoChooser.addOption("Nick's Taxi Service", () -> drive.driveRobotCentricCommand(() -> new ChassisSpeeds(0.5, 0, 0)).withTimeout(4));
+    autoChooser.addOption("Nick's Taxi Service + 10 second wait as requested", () -> Commands.waitSeconds(10.0).andThen(drive.driveRobotCentricCommand(() -> new ChassisSpeeds(0.5, 0, 0)).withTimeout(4)));
     PathPlannerUtil.getAutos().forEach(path -> {
       autoChooser.addOption(path, () -> PathPlannerUtil.getAutoCommand(path));
     });

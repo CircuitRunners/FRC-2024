@@ -57,7 +57,7 @@ public class Drive extends SubsystemBase {
       null,
       this));
 
-      private SlewRateLimiter accLimiter;
+      private SlewRateLimiter forwardLimiter, strafeLimiter;
 
   
   /** Creates a new Drive. */
@@ -66,7 +66,8 @@ public class Drive extends SubsystemBase {
     this.swerve = swerve;
 //    resetGyroCommand();
   
-    accLimiter = new SlewRateLimiter(5, -10, 0);
+    forwardLimiter = new SlewRateLimiter(5, -10, 0);
+    strafeLimiter = new SlewRateLimiter(5, -10, 0);
   }
 
   @Override
@@ -91,15 +92,15 @@ public class Drive extends SubsystemBase {
   /* Drivebase Control */
   public void driveFieldCentric(ChassisSpeeds speeds) {
     swerve.setControl(SwerveConfig.drive
-        .withVelocityX(accLimiter.calculate(speeds.vxMetersPerSecond))
-        .withVelocityY(accLimiter.calculate(speeds.vyMetersPerSecond))
+        .withVelocityX(forwardLimiter.calculate(speeds.vxMetersPerSecond))
+        .withVelocityY(strafeLimiter.calculate(speeds.vyMetersPerSecond))
         .withRotationalRate(speeds.omegaRadiansPerSecond));
   }
 
   public void driveRobotCentric(ChassisSpeeds speeds) {
     swerve.setControl(SwerveConfig.robotCentric
-        .withVelocityX(accLimiter.calculate(speeds.vxMetersPerSecond))
-        .withVelocityY(accLimiter.calculate(speeds.vyMetersPerSecond))
+        .withVelocityX(forwardLimiter.calculate(speeds.vxMetersPerSecond))
+        .withVelocityY(strafeLimiter.calculate(speeds.vyMetersPerSecond))
         .withRotationalRate(speeds.omegaRadiansPerSecond));
   }
 
