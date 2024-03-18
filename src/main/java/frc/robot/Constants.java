@@ -229,8 +229,8 @@ public final class Constants {
     public static final int shooterArmId = 0;
     public static final double mid = 0;
 
-    public static final double shooterOutSpeed = 0;
-    public static final double shooterInSpeed = 0;
+    public static final double shooterOutSpeed = 1;
+    public static final double shooterInSpeed = -0.25;
   }
 
 

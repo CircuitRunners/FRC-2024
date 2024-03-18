@@ -5,6 +5,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -15,6 +16,7 @@ public class Shooter extends SubsystemBase {
   private TalonFX shooterRight = new TalonFX(ShooterConstants.shooterRightId);
   private TalonFX shooterArm = new TalonFX(ShooterConstants.shooterArmId); 
   private PIDController shooterPID = new PIDController(ShooterConstants.kP, ShooterConstants.kI, ShooterConstants.kD);
+  // private ArmFeedforward shooterFeedForward = new ArmFeedforward(ShooterConstants.ks, ShooterConstants.kv, ShooterConstants.kg);
 
   private double targetAngle = 0;
 
@@ -30,11 +32,11 @@ public class Shooter extends SubsystemBase {
     this.targetAngle = targetAngle;
   }
   
-  public Command setArmOut(){
+  public Command setArmIntake(){
     return runOnce(() -> moveArmToTargetPosition(ShooterConstants.high));
   }
 
-  public Command setArmIn(){
+  public Command setArmOuttake(){
     return runOnce(() -> moveArmToTargetPosition(ShooterConstants.low));
   }
 
@@ -55,6 +57,7 @@ public class Shooter extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    
     shooterArm.set(shooterPID.calculate(getPosition(), targetAngle));
   }
 }
