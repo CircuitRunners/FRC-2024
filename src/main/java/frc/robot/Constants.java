@@ -230,7 +230,10 @@ public final class Constants {
     public static final double mid = 0;
 
     public static final double shooterOutSpeed = 1;
-    public static final double shooterInSpeed = -0.25;
+    public static final double rollerInSpeed = -0.25;
+    public static final int rollerID = 0;
+    public static final int tofId = 0;
+    public static final double tofThreshold = Units.inchesToMeters(17) * 1000;
   }
 
 
