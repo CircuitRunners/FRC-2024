@@ -1,5 +1,6 @@
 package frc.lib.swerve;
 
+import com.ctre.phoenix6.configs.MountPoseConfigs;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrain;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants;
@@ -66,5 +67,9 @@ public class Swerve extends SwerveDrivetrain {
 
   public void addVisionMeasurement(Pose2d pose2d, double timestamp){
     m_odometry.addVisionMeasurement(pose2d, timestamp);
+  }
+
+  public void setPigeonOffset() {
+  m_pigeon2.getConfigurator().apply((new MountPoseConfigs()).withMountPosePitch(47.109375).withMountPoseRoll(-88.242188).withMountPoseYaw(-83.410950));
   }
 }
