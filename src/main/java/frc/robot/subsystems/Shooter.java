@@ -23,7 +23,7 @@ public class Shooter {
 
   public Command shootCommand(){
     return Commands.sequence(
-      rollers.runRollersOutCommand().withTimeout(2),
+      rollers.runRollersOutCommandSlow().withTimeout(0.2),
       Commands.parallel(
         arm.setArmShootPositionAndWait().withTimeout(2), 
         flywheel.runFlywheelOut()

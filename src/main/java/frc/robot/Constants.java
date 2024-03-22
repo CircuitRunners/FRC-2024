@@ -215,8 +215,8 @@ public final class Constants {
   public static final class ShooterConstants {
       
     public static class FlywheelConstants{
-    public static final int shooterLeftId = 11;
-    public static final int shooterRightId = 10;
+    public static final int shooterLeftId = 10;
+    public static final int shooterRightId = 11;
     public static final double shooterOutSpeedRPM = 1500;
     public static final double kS = 0.3;
     public static final double kV = 1.5;
@@ -225,7 +225,7 @@ public final class Constants {
     
     
     public static class ArmConstants{      
-      public static final double encoderDeadBand = 1;
+      public static final double encoderThreshold = 0.1;
       public static final Rotation2d shootRotation = Rotation2d.fromDegrees(65);
       public static final Rotation2d intakeRotation = Rotation2d.fromDegrees(-50);
       public static final double kP = 3;
@@ -234,16 +234,19 @@ public final class Constants {
       public static final double kS = 2;
       public static final double kV = 0.4;
       public static final double kG = 0.3;
-      public static final int armLeaderId = 8;
-      public static final int armFollowerId = 9;
+      public static final int armLeaderId = 9;
+      public static final int armFollowerId = 8;
       public static final int throuhBoreEncoderPort = 9;
       // Degrees Per Second
       public static final double armSpeed = 10;
+      public static final double maxRadians = 0.421;
+      public static final double minRadians = 0.115;
     }
 
     public static class RollerConstants{
       public static final double rollerInSpeed = 1;
-      public static final double rollerOutSpeed = -0.5;
+      public static final double rollerOutSpeed = -1;
+      public static final double rollerOutSpeedSlow = -0.25;
        
 
       public static final int rollerID = 9;

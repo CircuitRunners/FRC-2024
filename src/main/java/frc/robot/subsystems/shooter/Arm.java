@@ -42,7 +42,7 @@ public class Arm extends SubsystemBase {
   
   public Arm() {
     armLeader.getConfigurator()
-      .apply(new CurrentLimitsConfigs().withStatorCurrentLimit(30).withSupplyCurrentLimit(30));
+      .apply(new CurrentLimitsConfigs().withStatorCurrentLimit(20).withSupplyCurrentLimit(20));
     // armFollower.setControl(new Follower(ArmConstants.armLeaderId, true));
     armLeader.getConfigurator().apply(new MotorOutputConfigs().withNeutralMode(NeutralModeValue.Brake));
     resetTargetAngleToEncoderAngle();
@@ -68,12 +68,14 @@ public class Arm extends SubsystemBase {
     return armLeader.getVelocity().getValueAsDouble();
   }
   public void setTargetAngle(Rotation2d targetAngle){ 
-    if(MathUtil.applyDeadband(Math.abs(this.targetAngle.getDegrees() - getArmRotation().getDegrees()), ArmConstants.encoderDeadBand) > 0 && targetAngle.getDegrees() > 45 && targetAngle.getDegrees() < 100){
+    if(!isArmAtTarget(ArmConstants.encoderThreshold) 
+        && targetAngle.getRadians() >= ArmConstants.minRadians 
+        && targetAngle.getRadians() <= ArmConstants.maxRadians){
       this.targetAngle = targetAngle;
     }
   }
   
-  public Command setArmIntake(){
+  public Command setArmIntakePosition(){
     return runOnce(() -> setTargetAngle(ArmConstants.intakeRotation));
   }
 
@@ -86,7 +88,7 @@ public class Arm extends SubsystemBase {
   }
 
   public boolean isArmAtTarget(double threshold){
-    return Math.abs(targetAngle.getRadians() - getArmRotation().getRadians()) < threshold;
+    return MathUtil.isNear(targetAngle.getDegrees(), getArmRotation().getDegrees(),threshold);
   }
 
   public Command setArmShootPositionAndWait(){
@@ -102,14 +104,21 @@ public class Arm extends SubsystemBase {
     return routine.quasistatic(direction);
   }
 
+  public Rotation2d getTargetAngle() {
+    return this.targetAngle;
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    if (MathUtil.isNear(targetAngle.getRadians(), getArmRotation().getRadians(), ArmConstants.encoderDeadBand)) {
-    var targetState = armProfile.calculate(0.02, new TrapezoidProfile.State(getArmRotation().getRadians(), 0.0), new TrapezoidProfile.State(targetAngle.getRadians(), 0.0));
-    armLeader.setVoltage(shooterPID.calculate(getArmRotation().getDegrees(), targetState.position) + shooterFeedForward.calculate(targetState.position, targetState.velocity));
+    if (!isArmAtTarget(ArmConstants.encoderThreshold)) {
+      var targetState = armProfile.calculate(0.02, new TrapezoidProfile.State(getArmRotation().getRadians(), 0.0), new TrapezoidProfile.State(getTargetAngle().getRadians(), 0.0));
+      armLeader.setVoltage(shooterPID.calculate(getArmRotation().getRadians(), targetState.position) + shooterFeedForward.calculate(targetState.position, targetState.velocity));
     }
-    SmartDashboard.putNumber("Through Bore Encoder value Degrees", getArmRotation().getRadians());
-    SmartDashboard.putNumber("Arm Target Angle Degrees", targetAngle.getRadians());
+    else {
+      armLeader.setVoltage(0);
+    }
+    SmartDashboard.putNumber("Through Bore Encoder value Radians", getArmRotation().getRadians());
+    SmartDashboard.putNumber("Arm Target Angle Radians", targetAngle.getRadians());
   }
 }

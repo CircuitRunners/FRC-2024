@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.lib.swerve.SwerveConfig;
 import frc.lib.utils.PathPlannerUtil;
 import frc.robot.Constants.DriverConstants;
@@ -159,19 +160,19 @@ public class Robot extends TimedRobot {
 
     operatorControls.start().onTrue(Commands.runOnce(() -> shooter.arm.resetTargetAngleToEncoderAngle()));
     operatorControls.setArmShootPosition().onTrue(shooter.arm.setArmShootPosition());
-    operatorControls.setArmIntake().onTrue(shooter.arm.setArmIntake());
+    operatorControls.setArmIntakePosition().onTrue(shooter.arm.setArmIntakePosition());
     shooter.arm.runManual(operatorControls.armManual());
-    operatorControls.runFlywheelOut().whileTrue(shooter.flywheel.runFlywheelOut());
+    operatorControls.runFlywheelOut().whileTrue(shooter.flywheel.runFlywheelOut()).onFalse(shooter.flywheel.stopFlywheelCommand());
     operatorControls.runShooterIn().whileTrue(shooter.rollers.runRollersInCommand());
     operatorControls.autoIntakeFromSource().whileTrue(shooter.rollers.autoIntake());
-    operatorControls.runRollersOut().whileTrue(shooter.rollers.runRollersOutCommand());
+    operatorControls.runRollersOut().whileTrue(shooter.rollers.runRollersOutCommand()).onFalse(shooter.rollers.stopRollersCommand());
     operatorControls.shoot().onTrue(shooter.shootCommand());
 
-    // // SysID for shooter arm
-    // operatorControls.armDynamicForward().whileTrue(shooter.arm.sysIdDnamicCommand(Direction.kForward));
-    // operatorControls.armDynamicReverse().whileTrue(shooter.arm.sysIdDnamicCommand(Direction.kReverse));
-    // operatorControls.armQuasistaticForward().whileTrue(shooter.arm.sysIdQuasistaticCommand(Direction.kForward));
-    // operatorControls.armQuasistaticReverse().whileTrue(shooter.arm.sysIdQuasistaticCommand(Direction.kReverse));   
+    // SysID for shooter arm
+    operatorControls.armDynamicForward().whileTrue(shooter.arm.sysIdDynamicCommand(Direction.kForward));
+    operatorControls.armDynamicReverse().whileTrue(shooter.arm.sysIdDynamicCommand(Direction.kReverse));
+    operatorControls.armQuasistaticForward().whileTrue(shooter.arm.sysIdQuasistaticCommand(Direction.kForward));
+    operatorControls.armQuasistaticReverse().whileTrue(shooter.arm.sysIdQuasistaticCommand(Direction.kReverse));   
 
     // operatorControls.runIntakeOut().whileTrue(intake.runIntakeOutCommand());
     // operatorControls.setArmHigh().onTrue(intake.setArmHighCommand());

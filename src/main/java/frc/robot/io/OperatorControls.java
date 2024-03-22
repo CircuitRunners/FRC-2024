@@ -38,7 +38,7 @@ public class OperatorControls extends CommandXboxController {
   }
 
 
-  public Trigger setArmIntake() {
+  public Trigger setArmIntakePosition() {
     return new Trigger(() -> MathUtil.applyDeadband(-getLeftX(), DriverConstants.stickDeadband) < 0);
   }
 
@@ -63,7 +63,7 @@ public class OperatorControls extends CommandXboxController {
   }
 
   public Trigger shoot(){
-    return leftBumper();
+    return leftTrigger();
   }
   public Trigger autoIntakeFromSource(){
     return rightBumper();
@@ -94,18 +94,18 @@ public class OperatorControls extends CommandXboxController {
   }
 
   public Trigger armDynamicForward() {
-    return y();
+    return povUp();
   }
 
   public Trigger armDynamicReverse() {
-    return a();
+    return povDown();
   }
 
   public Trigger armQuasistaticForward() {
-    return x();
+    return povLeft();
   }
 
   public Trigger armQuasistaticReverse() {
-    return b();
+    return povRight();
   }
 }

@@ -32,6 +32,11 @@ public class Rollers extends SubsystemBase {
   public void stopIntake(){
     runRollers(0);
   }
+
+  public Command stopRollersCommand(){
+    return run(this::stopIntake);
+  }
+
   public boolean hasNote(){
     return tof.getRange() < RollerConstants.tofThreshold;
   }
@@ -42,6 +47,10 @@ public class Rollers extends SubsystemBase {
 
   public Command runRollersOutCommand(){
     return run(() -> runRollers(RollerConstants.rollerOutSpeed));
+  }
+
+  public Command runRollersOutCommandSlow(){
+    return run(() -> runRollers(RollerConstants.rollerOutSpeedSlow));
   }
 
   @Override
