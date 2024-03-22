@@ -8,6 +8,7 @@ import com.playingwithfusion.TimeOfFlight;
 
 import edu.wpi.first.wpilibj.motorcontrol.VictorSP;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ShooterConstants.RollerConstants;
 
@@ -26,7 +27,7 @@ public class Rollers extends SubsystemBase {
   }
 
   public Command autoIntake(){
-    return runRollersInCommand().until(this::hasNote).finallyDo(this::stopIntake);
+    return runRollersInCommand().until(this::hasNote).andThen(Commands.waitSeconds(0.1)).finallyDo(this::stopIntake);
   }
   public void stopIntake(){
     runRollers(0);
@@ -39,7 +40,7 @@ public class Rollers extends SubsystemBase {
     rollers.set(speed);
   }
 
-  public Command runRollersOut(){
+  public Command runRollersOutCommand(){
     return run(() -> runRollers(RollerConstants.rollerOutSpeed));
   }
 

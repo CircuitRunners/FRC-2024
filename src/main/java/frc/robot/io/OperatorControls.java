@@ -58,15 +58,19 @@ public class OperatorControls extends CommandXboxController {
     return b();
   }
 
+  public Trigger runRollersOut(){
+    return leftBumper();
+  }
+
   public Trigger shoot(){
-    return y();
+    return leftBumper();
+  }
+  public Trigger autoIntakeFromSource(){
+    return rightBumper();
   }
 
   // ---------------- Intake ----------------
 
-  public Trigger autoIntake(){
-    return rightBumper();
-  }
 
   public Trigger runIntakeOut(){
     return leftBumper();

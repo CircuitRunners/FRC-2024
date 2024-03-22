@@ -8,7 +8,6 @@ import java.util.function.Supplier;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.motorcontrol.VictorSP;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -42,6 +41,7 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     // DataLogManager.start("logs");
     configureSubsystems();
+    shooter.arm.resetTargetAngleToEncoderAngle();
     // vision = new Vision(drive::addVisionMeasurement);
   }
   
@@ -59,7 +59,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledInit() {
-  
+    shooter.arm.resetTargetAngleToEncoderAngle();
   }
 
   @Override
@@ -71,10 +71,11 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     m_autonomousCommand = autoChooser.getSelected().get();
-
+    shooter.arm.resetTargetAngleToEncoderAngle();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
+    
   }
 
   @Override
@@ -92,6 +93,7 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    shooter.arm.resetTargetAngleToEncoderAngle();
   }
 
   @Override
@@ -119,8 +121,8 @@ public class Robot extends TimedRobot {
 
   private void configureAutos() {
     PathPlannerUtil.configure(drive, intake, shooter, elevator);
-    autoChooser.setDefaultOption("Do Nothing", () -> Commands.print("Doing Nothing"));
-    autoChooser.addOption("Nick's Taxi Service + 10 second wait as requested", () -> Commands.waitSeconds(10.0).andThen(drive.driveRobotCentricCommand(() -> new ChassisSpeeds(0.5, 0, 0)).withTimeout(4)));
+    autoChooser.addOption("Do Nothing", () -> Commands.print("Doing Nothing"));
+    autoChooser.setDefaultOption("Nick's Taxi Service", () -> drive.driveRobotCentricCommand(() -> new ChassisSpeeds(0.5, 0, 0)).withTimeout(4));
     PathPlannerUtil.getAutos().forEach(path -> {
       autoChooser.addOption(path, () -> PathPlannerUtil.getAutoCommand(path));
     });
@@ -131,17 +133,14 @@ public class Robot extends TimedRobot {
     
     // ------------------------------- DRIVER CONTROLS ---------------------------------------------------------
     driverControls = new DriverControls(DriverConstants.driverPort);
-    drive.setDefaultCommand(
-      drive.driveFieldCentricCommand(() -> SwerveConfig.toChassisSpeeds(driverControls, drive)));
+    drive.setDefaultCommand(drive.driveFieldCentricCommand(() -> SwerveConfig.toChassisSpeeds(driverControls, drive)));
       driverControls.increaseLimit()
       .onTrue(Commands.runOnce(() -> Drive.limit = 1.0))
       .onFalse(Commands.runOnce(() -> Drive.limit = 0.8));
-      driverControls.robotRelative()
-      .whileTrue(drive.driveRobotCentricCommand(() -> SwerveConfig.toChassisSpeeds(driverControls, drive)));
       driverControls.resetGyro().onTrue(drive.resetGyroCommand());
 //      driverControls.toAmp().whileTrue(AutoBuilder.pathfindToPose((DriverStation.getAlliance().get() == Alliance.Blue ? FieldConstants.kBlueAmpPose2d : FieldConstants.kRedAmpPose2d), SwerveConstants.pathConstraints));
       // driverControls.toSource().whileTrue(AutoBuilder.pathfindToPose((DriverStation.getAlliance().get() == Alliance.Blue ? FieldConstants.kBlueAmpPose2d : FieldConstants.kRedAmpPose2d), SwerveConstants.pathConstraints));
-     driverControls.aimAtSpeaker().whileTrue(new AimAtSpeaker(drive, driverControls));
+      driverControls.aimAtSpeaker().whileTrue(new AimAtSpeaker(drive, driverControls));
       
       // ------------------------------ TUNING CONTROLS ---------------------------
       // driverControls.y().onTrue(drive.toggleSysIDMode());
@@ -158,13 +157,21 @@ public class Robot extends TimedRobot {
     // operatorControls.setElevatorLow().onTrue(elevator.setLowCommand());
     // elevator.moveElevator(operatorControls.elevatorManual());
 
+    operatorControls.start().onTrue(Commands.runOnce(() -> shooter.arm.resetTargetAngleToEncoderAngle()));
     operatorControls.setArmShootPosition().onTrue(shooter.arm.setArmShootPosition());
     operatorControls.setArmIntake().onTrue(shooter.arm.setArmIntake());
     shooter.arm.runManual(operatorControls.armManual());
     operatorControls.runFlywheelOut().whileTrue(shooter.flywheel.runFlywheelOut());
     operatorControls.runShooterIn().whileTrue(shooter.rollers.runRollersInCommand());
-    operatorControls.autoIntake().whileTrue(shooter.rollers.autoIntake());
+    operatorControls.autoIntakeFromSource().whileTrue(shooter.rollers.autoIntake());
+    operatorControls.runRollersOut().whileTrue(shooter.rollers.runRollersOutCommand());
     operatorControls.shoot().onTrue(shooter.shootCommand());
+
+    // // SysID for shooter arm
+    // operatorControls.armDynamicForward().whileTrue(shooter.arm.sysIdDnamicCommand(Direction.kForward));
+    // operatorControls.armDynamicReverse().whileTrue(shooter.arm.sysIdDnamicCommand(Direction.kReverse));
+    // operatorControls.armQuasistaticForward().whileTrue(shooter.arm.sysIdQuasistaticCommand(Direction.kForward));
+    // operatorControls.armQuasistaticReverse().whileTrue(shooter.arm.sysIdQuasistaticCommand(Direction.kReverse));   
 
     // operatorControls.runIntakeOut().whileTrue(intake.runIntakeOutCommand());
     // operatorControls.setArmHigh().onTrue(intake.setArmHighCommand());
@@ -172,11 +179,6 @@ public class Robot extends TimedRobot {
     // operatorControls.armManualDown().whileTrue(intake.moveArmManualDown());
     // operatorControls.armManualUp().whileTrue(intake.moveArmManualUp());
 
-    // // SysID for intake arm
-    // operatorControls.armDynamicForward().whileTrue(intake.sysIdDnamicCommand(Direction.kForward));
-    // operatorControls.armDynamicReverse().whileTrue(intake.sysIdDnamicCommand(Direction.kReverse));
-    // operatorControls.armQuasistaticForward().whileTrue(intake.sysIdQuasistaticCommand(Direction.kForward));
-    // operatorControls.armQuasistaticReverse().whileTrue(intake.sysIdQuasistaticCommand(Direction.kReverse));   
 
   }
 

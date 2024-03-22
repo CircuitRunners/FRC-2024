@@ -19,7 +19,6 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.Measure;
-import edu.wpi.first.wpilibj.DutyCycle;
 import frc.lib.swerve.COTSFalconSwerveConstants;
 import frc.lib.swerve.SwerveModuleConstants;
 import frc.lib.utils.AllianceFlipUtil;
@@ -216,16 +215,17 @@ public final class Constants {
   public static final class ShooterConstants {
       
     public static class FlywheelConstants{
-    public static final int shooterLeftId = 0;
-    public static final int shooterRightId = 0;
+    public static final int shooterLeftId = 11;
+    public static final int shooterRightId = 10;
     public static final double shooterOutSpeedRPM = 1500;
-    public static final double kS = 0;
-    public static final double kV = 0;
-    public static final double kA = 0;
+    public static final double kS = 0.3;
+    public static final double kV = 1.5;
+    public static final double kA = 0.2;
     }
     
     
     public static class ArmConstants{      
+      public static final double encoderDeadBand = 1;
       public static final Rotation2d shootRotation = Rotation2d.fromDegrees(65);
       public static final Rotation2d intakeRotation = Rotation2d.fromDegrees(-50);
       public static final double kP = 3;
@@ -234,16 +234,19 @@ public final class Constants {
       public static final double kS = 2;
       public static final double kV = 0.4;
       public static final double kG = 0.3;
-      public static final int armLeaderId = 0;
-      public static final int armFollowerId = 0;
-      public static final DutyCycle throuhBoreEncoderPort = null;
-      public static final double armSpeed = 0;
+      public static final int armLeaderId = 8;
+      public static final int armFollowerId = 9;
+      public static final int throuhBoreEncoderPort = 9;
+      // Degrees Per Second
+      public static final double armSpeed = 10;
     }
 
     public static class RollerConstants{
-      public static final double rollerInSpeed = -0.25;
-      public static final double rollerOutSpeed = 0.5;
-      public static final int rollerID = 0;
+      public static final double rollerInSpeed = 1;
+      public static final double rollerOutSpeed = -0.5;
+       
+
+      public static final int rollerID = 9;
       public static final int tofId = 0;
       public static final double tofThreshold = Units.inchesToMeters(17) * 1000;
       

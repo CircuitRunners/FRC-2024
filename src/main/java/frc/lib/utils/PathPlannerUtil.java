@@ -57,9 +57,9 @@ public class PathPlannerUtil {
     NamedCommands.registerCommand("armLow", Commands.print("Setting intake Arm Low"));
     // NamedCommands.registerCommand("armHigh", intake.setArmHighCommand());
     NamedCommands.registerCommand("armHigh", Commands.print("Setting intake Arm High"));
-    NamedCommands.registerCommand("shoot", shooter.shootCommand().withTimeout(5));
-    // NamedCommands.registerCommand("shoot", Commands.print("Running Shooter Out"));
-    // NamedCommands.registerCommand("shooterIn", shooter.runShooterInCommand());
+    // NamedCommands.registerCommand("shoot", shooter.shootCommand().withTimeout(5));
+    NamedCommands.registerCommand("shoot", Commands.print("Running Shooter Out"));
+    // NamedCommands.registerCommand("shooterIn", shooter.shootCommand());
     NamedCommands.registerCommand("shooterIn", Commands.print("Running SHooter in"));
     // NamedCommands.registerCommand("shooterLow", shooter.setArmIn());
     NamedCommands.registerCommand("shooterLow", Commands.print("Setting Shooter Low"));
