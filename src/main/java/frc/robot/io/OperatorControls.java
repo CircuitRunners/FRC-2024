@@ -33,12 +33,12 @@ public class OperatorControls extends CommandXboxController {
 
   // ---------------- Shooter ----------------
 
-  public Trigger setShooterHigh() {
+  public Trigger setArmShootPosition() {
     return new Trigger(() -> MathUtil.applyDeadband(-getLeftX(), DriverConstants.stickDeadband) > 0);
   }
 
 
-  public Trigger setShooterLow() {
+  public Trigger setArmIntake() {
     return new Trigger(() -> MathUtil.applyDeadband(-getLeftX(), DriverConstants.stickDeadband) < 0);
   }
 
@@ -46,16 +46,20 @@ public class OperatorControls extends CommandXboxController {
     return leftBumper();
   }
 
-  public double shooterManual() {
+  public double armManual() {
     return MathUtil.applyDeadband(-getRightY(), DriverConstants.stickDeadband);
   }
 
-  public Trigger runShooterOut(){
+  public Trigger runFlywheelOut(){
     return a();
   }
 
   public Trigger runShooterIn(){
     return b();
+  }
+
+  public Trigger shoot(){
+    return y();
   }
 
   // ---------------- Intake ----------------

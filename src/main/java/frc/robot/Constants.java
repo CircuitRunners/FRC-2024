@@ -19,6 +19,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.Measure;
+import edu.wpi.first.wpilibj.DutyCycle;
 import frc.lib.swerve.COTSFalconSwerveConstants;
 import frc.lib.swerve.SwerveModuleConstants;
 import frc.lib.utils.AllianceFlipUtil;
@@ -214,26 +215,40 @@ public final class Constants {
 
   public static final class ShooterConstants {
       
+    public static class FlywheelConstants{
     public static final int shooterLeftId = 0;
     public static final int shooterRightId = 0;
+    public static final double shooterOutSpeedRPM = 1500;
+    public static final double kS = 0;
+    public static final double kV = 0;
+    public static final double kA = 0;
+    }
+    
+    
+    public static class ArmConstants{      
+      public static final Rotation2d shootRotation = Rotation2d.fromDegrees(65);
+      public static final Rotation2d intakeRotation = Rotation2d.fromDegrees(-50);
+      public static final double kP = 3;
+      public static final double kI = 0;
+      public static final double kD = 0.5;
+      public static final double kS = 2;
+      public static final double kV = 0.4;
+      public static final double kG = 0.3;
+      public static final int armLeaderId = 0;
+      public static final int armFollowerId = 0;
+      public static final DutyCycle throuhBoreEncoderPort = null;
+      public static final double armSpeed = 0;
+    }
 
-    public static final double high = 0;
-    public static final double low = 0;
+    public static class RollerConstants{
+      public static final double rollerInSpeed = -0.25;
+      public static final double rollerOutSpeed = 0.5;
+      public static final int rollerID = 0;
+      public static final int tofId = 0;
+      public static final double tofThreshold = Units.inchesToMeters(17) * 1000;
+      
+    }
 
-    public static final double kP = 0;
-    public static final double kI = 0;
-    public static final double kD = 0;
-    public static final double ks = 0;
-    public static final double kv = 0;
-    public static final double kg = 0;
-    public static final int shooterArmId = 0;
-    public static final double mid = 0;
-
-    public static final double shooterOutSpeed = 1;
-    public static final double rollerInSpeed = -0.25;
-    public static final int rollerID = 0;
-    public static final int tofId = 0;
-    public static final double tofThreshold = Units.inchesToMeters(17) * 1000;
   }
 
 
