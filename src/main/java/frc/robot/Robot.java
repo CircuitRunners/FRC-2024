@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.lib.swerve.SwerveConfig;
 import frc.lib.utils.PathPlannerUtil;
 import frc.robot.Constants.DriverConstants;
@@ -123,7 +122,8 @@ public class Robot extends TimedRobot {
   private void configureAutos() {
     PathPlannerUtil.configure(drive, intake, shooter, elevator);
     autoChooser.addOption("Do Nothing", () -> Commands.print("Doing Nothing"));
-    autoChooser.setDefaultOption("Nick's Taxi Service", () -> drive.driveRobotCentricCommand(() -> new ChassisSpeeds(0.5, 0, 0)).withTimeout(4));
+    autoChooser.setDefaultOption("Nick's Taxi Service", () ->   (drive.driveRobotCentricCommand(() -> new ChassisSpeeds(0.5, 0, 0)).withTimeout(4)));
+    autoChooser.addOption("Shoot + Nick's Taxi Service", () ->   shooter.shootCommand().andThen(drive.driveRobotCentricCommand(() -> new ChassisSpeeds(1.2, 0, 0)).withTimeout(2.5)));
     PathPlannerUtil.getAutos().forEach(path -> {
       autoChooser.addOption(path, () -> PathPlannerUtil.getAutoCommand(path));
     });
@@ -135,9 +135,9 @@ public class Robot extends TimedRobot {
     // ------------------------------- DRIVER CONTROLS ---------------------------------------------------------
     driverControls = new DriverControls(DriverConstants.driverPort);
     drive.setDefaultCommand(drive.driveFieldCentricCommand(() -> SwerveConfig.toChassisSpeeds(driverControls, drive)));
-      driverControls.increaseLimit()
+      driverControls.b()
       .onTrue(Commands.runOnce(() -> Drive.limit = 1.0))
-      .onFalse(Commands.runOnce(() -> Drive.limit = 0.8));
+      .onFalse(Commands.runOnce(() -> Drive.limit = 0.6 ));
       driverControls.resetGyro().onTrue(drive.resetGyroCommand());
 //      driverControls.toAmp().whileTrue(AutoBuilder.pathfindToPose((DriverStation.getAlliance().get() == Alliance.Blue ? FieldConstants.kBlueAmpPose2d : FieldConstants.kRedAmpPose2d), SwerveConstants.pathConstraints));
       // driverControls.toSource().whileTrue(AutoBuilder.pathfindToPose((DriverStation.getAlliance().get() == Alliance.Blue ? FieldConstants.kBlueAmpPose2d : FieldConstants.kRedAmpPose2d), SwerveConstants.pathConstraints));
@@ -150,7 +150,7 @@ public class Robot extends TimedRobot {
       // driverControls.sysIdQuasistaticForward().whileTrue(drive.sysIdQuasistatic(Direction.kForward));
       // driverControls.sysIdQuasistaticReverse().whileTrue(drive.sysIdQuasistatic(Direction.kReverse));
       // ------------------------------- OPERATOR CONTROLS ---------------------------------------------------------
-    operatorControls = new OperatorControls(DriverConstants.operatorPort);
+    operatorControls = new OperatorControls(0);
 
     // operatorControls.toggleElevatorManual().onTrue(elevator.toggleManualCommand());
     // operatorControls.setElevatorHigh().onTrue(elevator.setHighCommand());
@@ -162,17 +162,19 @@ public class Robot extends TimedRobot {
     operatorControls.setArmShootPosition().onTrue(shooter.arm.setArmShootPosition());
     operatorControls.setArmIntakePosition().onTrue(shooter.arm.setArmIntakePosition());
     shooter.arm.runManual(operatorControls.armManual());
-    operatorControls.runFlywheelOut().whileTrue(shooter.flywheel.runFlywheelOut()).onFalse(shooter.flywheel.stopFlywheelCommand());
-    operatorControls.runShooterIn().whileTrue(shooter.rollers.runRollersInCommand());
-    operatorControls.autoIntakeFromSource().whileTrue(shooter.rollers.autoIntake());
+    operatorControls.runFlywheelOut().whileTrue(shooter.flywheel.setShootSpeedCommand()).onFalse(shooter.flywheel.stopFlywheelCommand());
+    // operatorControls.runShooterIn().whileTrue(shooter.rollers.setRollersSpeedInCommand()).onFalse(shooter.rollers.runRollersOutCommandSlow().withTimeout(0.2).finallyDo(() -> shooter.rollers.stopRollersCommand()));
+    operatorControls.autoIntakeFromSource().whileTrue(shooter.rollers.autoIntake()).onFalse(shooter.rollers.runRollersOutCommandSlow().withTimeout(0.2).finallyDo(() -> shooter.rollers.stopRollers()));
     operatorControls.runRollersOut().whileTrue(shooter.rollers.runRollersOutCommand()).onFalse(shooter.rollers.stopRollersCommand());
     operatorControls.shoot().onTrue(shooter.shootCommand());
+    operatorControls.rightTrigger().onTrue(shooter.shootCommand());
+    operatorControls.x().onTrue(shooter.arm.setArmAmpPosition());
 
     // SysID for shooter arm
-    operatorControls.armDynamicForward().whileTrue(shooter.arm.sysIdDynamicCommand(Direction.kForward));
-    operatorControls.armDynamicReverse().whileTrue(shooter.arm.sysIdDynamicCommand(Direction.kReverse));
-    operatorControls.armQuasistaticForward().whileTrue(shooter.arm.sysIdQuasistaticCommand(Direction.kForward));
-    operatorControls.armQuasistaticReverse().whileTrue(shooter.arm.sysIdQuasistaticCommand(Direction.kReverse));   
+    // operatorControls.armDynamicForward().whileTrue(shooter.arm.sysIdDynamicCommand(Direction.kForward));
+    // operatorControls.armDynamicReverse().whileTrue(shooter.arm.sysIdDynamicCommand(Direction.kReverse));
+    // operatorControls.armQuasistaticForward().whileTrue(shooter.arm.sysIdQuasistaticCommand(Direction.kForward));
+    // operatorControls.armQuasistaticReverse().whileTrue(shooter.arm.sysIdQuasistaticCommand(Direction.kReverse));   
 
     // operatorControls.runIntakeOut().whileTrue(intake.runIntakeOutCommand());
     // operatorControls.setArmHigh().onTrue(intake.setArmHighCommand());

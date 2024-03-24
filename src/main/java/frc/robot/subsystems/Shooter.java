@@ -21,14 +21,15 @@ public class Shooter {
     rollers = new Rollers();
   }
 
+
   public Command shootCommand(){
     return Commands.sequence(
-      rollers.runRollersOutCommandSlow().withTimeout(0.2),
-      Commands.parallel(
-        arm.setArmShootPositionAndWait().withTimeout(2), 
-        flywheel.runFlywheelOut()
-        ),
-      rollers.runRollersInCommand()
+      flywheel.setShootSpeedCommand(),
+      arm.setArmShootPositionAndWait().withTimeout(4),
+      rollers.setRollersSpeedInCommand(),
+      Commands.waitSeconds(3),
+      flywheel.stopFlywheelCommand(),
+      rollers.stopRollersCommand()
     );
   }
 }

@@ -34,17 +34,17 @@ public class OperatorControls extends CommandXboxController {
   // ---------------- Shooter ----------------
 
   public Trigger setArmShootPosition() {
-    return new Trigger(() -> MathUtil.applyDeadband(-getLeftX(), DriverConstants.stickDeadband) > 0);
+    return povUp();
   }
 
 
   public Trigger setArmIntakePosition() {
-    return new Trigger(() -> MathUtil.applyDeadband(-getLeftX(), DriverConstants.stickDeadband) < 0);
+    return povDown();
   }
 
-  public Trigger toggleShooterManual() {
-    return leftBumper();
-  }
+  // public Trigger toggleShooterManual() {
+  //   return leftBumper();
+  // }
 
   public double armManual() {
     return MathUtil.applyDeadband(-getRightY(), DriverConstants.stickDeadband);

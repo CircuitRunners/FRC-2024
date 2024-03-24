@@ -4,11 +4,15 @@
 
 package frc.robot.subsystems.shooter;
 
+import java.util.function.Supplier;
+
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 
+import edu.wpi.first.math.controller.BangBangController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.utils.TunableNumber;
@@ -18,9 +22,10 @@ public class Flywheel extends SubsystemBase {
   private CANSparkMax flywheelRightLeader = new CANSparkMax(FlywheelConstants.shooterLeftId, MotorType.kBrushless);
   private CANSparkMax flywheelLeftFollower = new CANSparkMax(FlywheelConstants.shooterRightId, MotorType.kBrushless);
   private final RelativeEncoder flywheelLeftEncoder;
-  // private BangBangController flywheelController = new BangBangController();
-  // private SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(FlywheelConstants.kS, FlywheelConstants.kV, FlywheelConstants.kA);
+  private BangBangController flywheelController = new BangBangController();
+  private SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(FlywheelConstants.kS, FlywheelConstants.kV, FlywheelConstants.kA);
   private TunableNumber tunedkS = new TunableNumber("Flywheel/Tuning/kS");
+  private double targetSpeed;
 
   /** Creates a new Flywheel. */
   public Flywheel() {
@@ -39,23 +44,33 @@ public class Flywheel extends SubsystemBase {
     return flywheelLeftEncoder.getVelocity();
   }
 
-  public void runFlywheel(double speed){
-    // flywheelLeftLeader.setVoltage(flywheelController.calculate(getFlywheelRPM(), rpm) + feedforward.calculate(rpm));
-    flywheelRightLeader.set(speed);
+  public void setTargetSpeed(double targetSpeed){
+    this.targetSpeed = targetSpeed;
   }
 
-  public Command runFlywheelOut(){
-    return run(() -> runFlywheel(0.8));
+  public void stop() {
+    setTargetSpeed(0);
   }
+  
+  public Command setShootSpeedCommand(){
+    return runOnce(() -> setTargetSpeed(0.9));
+  }
+
+  public Command runFlywheelCommand(Supplier<Double> speedSupplier) {
+    return run(() -> setTargetSpeed(speedSupplier.get()));
+  }
+
   public Command stopFlywheelCommand(){
-    return run(() -> runFlywheel(0));
+    return runOnce(this::stop);
   }
-
+  
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     // if (tunedkS.hasChanged()) {
-    //   feedforward = new SimpleMotorFeedforward(tunedkS.get(), FlywheelConstants.kV, FlywheelConstants.kA);
-    // }
+    //     feedforward = new SimpleMotorFeedforward(tunedkS.get(), FlywheelConstants.kV, FlywheelConstants.kA);
+    //   }
+    //   flywheelRightLeader.setVoltage(flywheelController.calculate(getFlywheelRPM(), targetRPM));
+    flywheelRightLeader.set(targetSpeed);
   }
 }

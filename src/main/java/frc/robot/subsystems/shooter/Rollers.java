@@ -4,11 +4,12 @@
 
 package frc.robot.subsystems.shooter;
 
+import java.util.function.Supplier;
+
 import com.playingwithfusion.TimeOfFlight;
 
 import edu.wpi.first.wpilibj.motorcontrol.VictorSP;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ShooterConstants.RollerConstants;
 
@@ -22,19 +23,24 @@ public class Rollers extends SubsystemBase {
 
   }
 
-  public Command runRollersInCommand(){
-    return run(() -> runRollers(RollerConstants.rollerInSpeed));
+  public Command setRollersSpeedInCommand(){
+    return runOnce(() -> runRollers(RollerConstants.rollerInSpeed));
   }
 
-  public Command autoIntake(){
-    return runRollersInCommand().until(this::hasNote).andThen(Commands.waitSeconds(0.1)).finallyDo(this::stopIntake);
+  public Command runRollersCommand(Supplier<Double> speedSupplier){ 
+    return run(() -> runRollers(speedSupplier.get()));
   }
-  public void stopIntake(){
+
+
+  public Command autoIntake(){
+    return runRollersCommand(() -> RollerConstants.rollerInSpeed).until(this::hasNote).finallyDo(this::stopRollers);
+  }
+  public void stopRollers(){
     runRollers(0);
   }
 
   public Command stopRollersCommand(){
-    return run(this::stopIntake);
+    return runOnce(this::stopRollers);
   }
 
   public boolean hasNote(){
@@ -46,11 +52,11 @@ public class Rollers extends SubsystemBase {
   }
 
   public Command runRollersOutCommand(){
-    return run(() -> runRollers(RollerConstants.rollerOutSpeed));
+    return runOnce(() -> runRollers(RollerConstants.rollerOutSpeed));
   }
 
   public Command runRollersOutCommandSlow(){
-    return run(() -> runRollers(RollerConstants.rollerOutSpeedSlow));
+    return run(() -> runRollers(RollerConstants.rollerOutSpeedSlow)).withTimeout(0.1);
   }
 
   @Override
