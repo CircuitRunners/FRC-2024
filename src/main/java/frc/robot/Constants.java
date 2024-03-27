@@ -217,26 +217,25 @@ public final class Constants {
     public static class FlywheelConstants{
     public static final int shooterLeftId = 10;
     public static final int shooterRightId = 11;
-    public static final double shooterOutSpeedRPM = -1500;
+    public static final double shooterOutSpeedRPM = 1500;
     public static final double kS = 0.3;
     public static final double kV = 1.5;
     public static final double kA = 0.2;
     }
-    
-    
+
     public static class ArmConstants{      
-      public static final double maxRadians = Units.degreesToRadians(280 - 223);
-      public static final double minRadians = Units.degreesToRadians(175 - 223);
-      public static final double encoderThreshold = Units.degreesToRadians(5);
-      public static final Rotation2d intakeRotation = Rotation2d.fromDegrees(194 - 223);
+      public static final double maxRadians = Units.degreesToRadians(40);
+      public static final double minRadians = Units.degreesToRadians(-65);
+      public static final double encoderThreshold = Units.degreesToRadians(0.);
+      public static final Rotation2d intakeRotation = Rotation2d.fromDegrees(-35);
       public static final Rotation2d shootRotation = Rotation2d.fromRadians(maxRadians);
-      public static final Rotation2d ampRotation = Rotation2d.fromDegrees(180 - 223);
-      public static final double kP = 3.5;
+      public static final Rotation2d ampRotation = Rotation2d.fromDegrees(-60);
+      public static final double kP = 3.0;
       public static final double kI = 0;
-      public static final double kD = 0.5;
-      public static final double kS = 0.2;
-      public static final double kV = 0.4;
-      public static final double kG = 0.3;
+      public static final double kD = 0.2;
+      public static final double kS = 0.5;
+      public static final double kV = 0.5;
+      public static final double kG = 0.7;
       public static final int armLeaderId = 9;
       public static final int armFollowerId = 8;
       public static final int throuhBoreEncoderPort = 9;

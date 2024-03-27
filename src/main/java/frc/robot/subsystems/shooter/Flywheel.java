@@ -53,7 +53,7 @@ public class Flywheel extends SubsystemBase {
   }
   
   public Command setShootSpeedCommand(){
-    return runOnce(() -> setTargetSpeed(0.9));
+    return runOnce(() -> setTargetSpeed(-1));
   }
 
   public Command runFlywheelCommand(Supplier<Double> speedSupplier) {

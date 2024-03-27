@@ -40,7 +40,7 @@ public class Drive extends SubsystemBase {
       null,
       Volts.of(7),
       null,
-      (state) -> SignalLogger.writeString("state", state.toString())),
+      null),
     new SysIdRoutine.Mechanism(
       (volts) -> swerve.setControl(translation.withVolts(volts)),
       null,
@@ -51,7 +51,7 @@ public class Drive extends SubsystemBase {
       null,
       Volts.of(7),
       null,
-      (state) -> SignalLogger.writeString("state", state.toString())),
+      null),
     new SysIdRoutine.Mechanism(
       (volts) -> swerve.setControl(rotation.withVolts(volts)),
       null,

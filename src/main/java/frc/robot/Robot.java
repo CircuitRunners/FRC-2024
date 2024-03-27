@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.lib.swerve.SwerveConfig;
 import frc.lib.utils.PathPlannerUtil;
 import frc.robot.Constants.DriverConstants;
@@ -133,15 +134,16 @@ public class Robot extends TimedRobot {
   private void configureBindings() {
     
     // ------------------------------- DRIVER CONTROLS ---------------------------------------------------------
-    driverControls = new DriverControls(DriverConstants.driverPort);
-    drive.setDefaultCommand(drive.driveFieldCentricCommand(() -> SwerveConfig.toChassisSpeeds(driverControls, drive)));
-      driverControls.b()
-      .onTrue(Commands.runOnce(() -> Drive.limit = 1.0))
-      .onFalse(Commands.runOnce(() -> Drive.limit = 0.6 ));
-      driverControls.resetGyro().onTrue(drive.resetGyroCommand());
+    // driverControls = new DriverControls(DriverConstants.driverPort);
+    // drive.setDefaultCommand(drive.driveFieldCentricCommand(() -> SwerveConfig.toChassisSpeeds(driverControls, drive)));
+    //   driverControls.y()
+    //   .onTrue(Commands.runOnce(() -> Drive.limit = 1.0))
+    //   .onFalse(Commands.runOnce(() -> Drive.limit = 0.4 ));
+    //   driverControls.b().whileTrue(shooter.rollers.setRollersSpeedInCommand()).onFalse(shooter.rollers.stopRollersCommand());
+    //   driverControls.resetGyro().onTrue(drive.resetGyroCommand());
 //      driverControls.toAmp().whileTrue(AutoBuilder.pathfindToPose((DriverStation.getAlliance().get() == Alliance.Blue ? FieldConstants.kBlueAmpPose2d : FieldConstants.kRedAmpPose2d), SwerveConstants.pathConstraints));
       // driverControls.toSource().whileTrue(AutoBuilder.pathfindToPose((DriverStation.getAlliance().get() == Alliance.Blue ? FieldConstants.kBlueAmpPose2d : FieldConstants.kRedAmpPose2d), SwerveConstants.pathConstraints));
-      driverControls.aimAtSpeaker().whileTrue(new AimAtSpeaker(drive, driverControls));
+      // driverControls.aimAtSpeaker().whileTrue(new AimAtSpeaker(drive, driverControls));
       
       // ------------------------------ TUNING CONTROLS ---------------------------
       // driverControls.y().onTrue(drive.toggleSysIDMode());
@@ -161,6 +163,7 @@ public class Robot extends TimedRobot {
     operatorControls.start().onTrue(Commands.runOnce(() -> shooter.arm.resetTargetAngleToEncoderAngle()));
     operatorControls.setArmShootPosition().onTrue(shooter.arm.setArmShootPosition());
     operatorControls.setArmIntakePosition().onTrue(shooter.arm.setArmIntakePosition());
+    operatorControls.x().onTrue(shooter.arm.setArmAmpPosition());
     shooter.arm.runManual(operatorControls.armManual());
     operatorControls.runFlywheelOut().whileTrue(shooter.flywheel.setShootSpeedCommand()).onFalse(shooter.flywheel.stopFlywheelCommand());
     // operatorControls.runShooterIn().whileTrue(shooter.rollers.setRollersSpeedInCommand()).onFalse(shooter.rollers.runRollersOutCommandSlow().withTimeout(0.2).finallyDo(() -> shooter.rollers.stopRollersCommand()));
@@ -168,7 +171,6 @@ public class Robot extends TimedRobot {
     operatorControls.runRollersOut().whileTrue(shooter.rollers.runRollersOutCommand()).onFalse(shooter.rollers.stopRollersCommand());
     operatorControls.shoot().onTrue(shooter.shootCommand());
     operatorControls.rightTrigger().onTrue(shooter.shootCommand());
-    operatorControls.x().onTrue(shooter.arm.setArmAmpPosition());
 
     // SysID for shooter arm
     // operatorControls.armDynamicForward().whileTrue(shooter.arm.sysIdDynamicCommand(Direction.kForward));

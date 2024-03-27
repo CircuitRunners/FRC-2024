@@ -11,11 +11,8 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Voltage;
@@ -33,9 +30,9 @@ public class Arm extends SubsystemBase {
   /** Creates a new Arm. */
   private TalonFX armLeader = new TalonFX(ArmConstants.armLeaderId); 
   // private TalonFX armFollower = new TalonFX(ArmConstants.armFollowerId); 
-  private TrapezoidProfile armProfile = new TrapezoidProfile(new Constraints(Units.degreesToRadians(45), Units.degreesToRadians(90)));
+  // private TrapezoidProfile armProfile = new TrapezoidProfile(new Constraints(Units.degreesToRadians(45), Units.degreesToRadians(90)));
   private PIDController shooterPID = new PIDController(ArmConstants.kP, ArmConstants.kI, ArmConstants.kD);
-  private ArmFeedforward shooterFeedForward = new ArmFeedforward(ArmConstants.kS, ArmConstants.kV, ArmConstants.kG);
+  // private ArmFeedforward shooterFeedForward = new ArmFeedforward(ArmConstants.kS, ArmConstants.kV, ArmConstants.kG);
   private DutyCycleEncoder throughBore = new DutyCycleEncoder(ArmConstants.throuhBoreEncoderPort);
   private Rotation2d targetAngle = getArmRotation(); 
   private final SysIdRoutine routine = new SysIdRoutine(new Config(), new Mechanism(this::armVoltage, null, this));
@@ -44,8 +41,8 @@ public class Arm extends SubsystemBase {
     armLeader.getConfigurator()
       .apply(new CurrentLimitsConfigs().withStatorCurrentLimit(20).withSupplyCurrentLimit(20));
     // armFollower.setControl(new Follower(ArmConstants.armLeaderId, true));
-    // armLeader.getConfigurator().apply(new MotorOutputConfigs().withNeutralMode(NeutralModeValue.Brake));
     armLeader.getConfigurator().apply(new MotorOutputConfigs().withNeutralMode(NeutralModeValue.Brake));
+    // armLeader.getConfigurator().apply(new MotorOutputConfigs().withNeutralMode(NeutralModeValue.Coast));
     armLeader.setInverted(false);
     resetTargetAngleToEncoderAngle();
   }
@@ -63,7 +60,7 @@ public class Arm extends SubsystemBase {
   }
 
   public Rotation2d getArmRotation(){
-    return Rotation2d.fromRadians(throughBore.getAbsolutePosition() * 2 * Math.PI).minus(Rotation2d.fromDegrees(223));
+    return Rotation2d.fromRadians(throughBore.getAbsolutePosition() * 2 * Math.PI).minus(Rotation2d.fromDegrees(350));
   }
 
   public double getArmVelocity(){
@@ -118,6 +115,10 @@ public class Arm extends SubsystemBase {
     }
     else {
       armLeader.setVoltage(0);
+    }
+
+    if (!targetAngle.equals(ArmConstants.shootRotation) && !targetAngle.equals(ArmConstants.ampRotation) && !targetAngle.equals(ArmConstants.intakeRotation) && !targetAngle.equals(getArmRotation())) {
+      setTargetAngle(getArmRotation());
     }
     SmartDashboard.putNumber("Through Bore Encoder value Degrees", getArmRotation().getDegrees());
     SmartDashboard.putNumber("Arm Target Angle Degrees", targetAngle.getDegrees());
